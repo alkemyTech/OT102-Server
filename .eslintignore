@@ -8,5 +8,6 @@ migrations/
 .github/
 .husky/
 bin/
+dist/
 *.test.js
 *.spec.js
