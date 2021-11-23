@@ -9,15 +9,15 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      image: {
+        allowNull: false,
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.TEXT
+      },
       content: {
-        type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -26,15 +26,13 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }, 
-      deletedAt:{
-        allowNull: false,
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
-      
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Testimonials');
   }
-};
+}
