@@ -11,6 +11,7 @@ module.exports = {
       imageUrl: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       text: {
         type: Sequelize.STRING,
