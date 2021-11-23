@@ -7,16 +7,16 @@ module.exports = {
        phone: 1151111111,
        email: 'test@test.com',
        message: 'Contacto desde la web',
-       createdAt: new Date,
-       updatedAt: new Date
+       createdAt: new Date(),
+       updatedAt: new Date()
      },
      {
       name: 'Juan Lopez',
       phone: 2252222222,
       email: 'test@gmail.com',
       message: 'Contacto desde la web',
-      createdAt: new Date,
-      updatedAt: new Date
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   
   },

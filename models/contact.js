@@ -14,15 +14,28 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Contact.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     phone: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    message: DataTypes.STRING,
-    deletedAt: DataTypes.DATE
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    message: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'Contact',
-    paranoid: true
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deletedAt',
+    paranoid: true,
+    timestamps: true
   });
   return Contact;
 };
