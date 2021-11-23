@@ -14,16 +14,13 @@ module.exports = {
         unique: true,
       },
       text: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       order: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      // organizationId: {
-      //   type: Sequelize.INTEGER
-      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -32,6 +29,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      deletedAt: {
+        type: Sequelize.DATE
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

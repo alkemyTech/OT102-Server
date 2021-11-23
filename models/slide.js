@@ -20,21 +20,22 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       text: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       order: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      // organizationId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      // }
     },
     {
       sequelize,
       modelName: 'Slide',
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: 'deletedAt',
+      paranoid: true,
+      timestamps: true,
     }
   );
   return Slide;
