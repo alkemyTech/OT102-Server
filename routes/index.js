@@ -13,7 +13,9 @@ router.get('/ping', async (req, res) => {
     };
     res.status(200).send(pongResponse);
   } catch (Error) {
-    res.status(500).send({ Error: 'Something went wrong.' });
+    res.status(500).send(
+      { Error: 'Something went wrong.' },
+    );
   }
 });
 
