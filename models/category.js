@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
-      description: DataTypes.STRING,
+      description: DataTypes.TEXT,
       deletedAt: DataTypes.DATE,
     },
     {
