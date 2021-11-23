@@ -28,8 +28,8 @@ module.exports = {
         type: Sequelize.DATE
       }, 
       deletedAt:{
-        paranoid:true,
-        timestamps:true
+        allowNull: false,
+        type: Sequelize.DATE
       }
       
     });
