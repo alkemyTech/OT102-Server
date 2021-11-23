@@ -20,14 +20,12 @@ const hardcodedData = {
 };
 
 router.get('/:id/public', async (req, res) => {
-  const query = hardcodedData[req.params.id];
+  const data = hardcodedData[req.params.id];
   try {
-    if (query) {
+    if (data) {
       const response = {
         status: true,
-        data: {
-          query,
-        },
+        data,
         msg: 'Sucessfull!',
       };
       res.status(200).send(response);
