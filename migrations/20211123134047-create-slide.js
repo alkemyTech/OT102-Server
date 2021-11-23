@@ -30,8 +30,18 @@ module.exports = {
         type: Sequelize.DATE,
       },
       deletedAt: {
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+      organizationId: {
+        type: Sequelize.INTEGER,
+      
+        references: {
+          model: 'Organizations',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

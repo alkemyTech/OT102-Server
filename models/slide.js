@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Slide.belongsTo(models.Organization);
+      Slide.belongsTo(models.Organization, { as: 'organization' });
     }
   }
   Slide.init(
@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       order: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      organizationId: {
+        type: DataTypes.INTEGER,
       },
     },
     {
