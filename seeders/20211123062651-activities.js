@@ -6,10 +6,15 @@ module.exports = {
       await queryInterface.bulkInsert('activities', [
         {
           name: 'Richard',
-          content: 'test0',
           image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
-          createdAt: new Date(),
-          updatedAt: new Date()
+          content: 'test0',
+          deletedAt: new Date
+        },
+        {
+          name: 'Joseph',
+          image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
+          content: "test1",
+          deletedAt: new Date
         }], {});
     },
 
