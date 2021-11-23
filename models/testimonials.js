@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Testimonials',
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at', 
+    deletedAt: 'deletedAt', 
+    paranoid: true, 
+    timestamps: true,
   });
   return Testimonials;
 };
