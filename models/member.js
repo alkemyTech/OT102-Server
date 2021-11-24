@@ -18,10 +18,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    deletedAt: DataTypes.DATE
+    deletedAt: {
+      type: DataTypes.DATE
+    },
+    createdAt: {
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Member',
+    paranoid: true,
+    timestamps: true
   });
   return Member;
 };

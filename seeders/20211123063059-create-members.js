@@ -5,8 +5,8 @@ module.exports = {
     await queryInterface.bulkInsert('Members', [{
       name: 'John Doe',
       image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
-      createdAt: new Date,
-      updatedAt: new Date
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   },
 
