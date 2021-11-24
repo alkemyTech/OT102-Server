@@ -4,7 +4,7 @@ exports.getAll = async () => {
   try {
     const categories = await Category.findAll({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'description', 'id'],
+        exclude: ['createdAt', 'updatedAt', 'deletedAt'],
       },
     })
     return categories
