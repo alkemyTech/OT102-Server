@@ -1,25 +1,13 @@
-const express = require('express');
+const express = require('express')
 
-const router = new express.Router();
+const router = new express.Router()
 
-/* GET test PING route. */
-router.get('/ping', async (req, res) => {
-  try {
-    const pongResponse = {
-      status: true,
-      body: {
-        message: 'PONG',
-      },
-    };
-    res.status(200).send(pongResponse);
-  } catch (Error) {
-    res.status(500).send({ Error: 'Something went wrong.' });
-  }
-});
+const usersRouter = require('./user')
+const pingRouter = require('./ping')
+const categoriesRouter = require('./categories')
 
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.use('/users', usersRouter)
+router.use('/ping', pingRouter)
+router.use('/categories', categoriesRouter)
 
-module.exports = router;
+module.exports = router
