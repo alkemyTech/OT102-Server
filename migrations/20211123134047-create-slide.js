@@ -38,8 +38,6 @@ module.exports = {
           model: 'Organizations',
           key: 'id',
         },
-        onUpdate: 'cascade',
-        onDelete: 'set null',
       },
     });
   },
