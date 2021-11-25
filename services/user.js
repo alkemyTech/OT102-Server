@@ -1,10 +1,10 @@
-const User = require('../models/user')
+const { User } = require('../models')
 
 exports.getUsers = async () => {
   try {
     const users = await User.findAll()
     return users
-  } catch (e) {
-    throw Error('Error while retrieving Users')
+  } catch (err) {
+    throw Error(err.message)
   }
 }
