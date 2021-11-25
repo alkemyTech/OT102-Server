@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 
 app.use((err, req, res) => {
-handleError(err, res)
+  handleError(err, res)
 })
 
 module.exports = app
