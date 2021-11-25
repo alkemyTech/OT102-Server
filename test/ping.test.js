@@ -5,9 +5,7 @@ describe('GET /ping', () => {
   it('respond with PONG', (done) => {
     const bodyResponse = {
       "status": true,
-      "body": {
-        "message": "PONG"
-      }
+      "message": "PONG"
     }
     request(app).get('/ping').expect(bodyResponse, done)
   })

@@ -13,5 +13,7 @@ module.exports = {
       'error',
       process.platform === 'win32' ? 'windows' : 'unix',
     ],
+    semi: ['error', 'never'],
+    'no-param-reassign': ['error', { props: false }],
   },
-};
+}
