@@ -1,21 +1,15 @@
-class ErrorHandler extends Error {
-  constructor(statusCode, message) {
-    super()
+class ErrorObject extends Error {
+  constructor(message, statusCode) {
+    super(message)
+
     this.statusCode = statusCode
-    this.message = message
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error'
+    this.isOperational = true
+
+    Error.captureStackTrace(this, this.constructor)
   }
 }
 
-const handleError = (err, res) => {
-  const { statusCode, message } = err
-  res.status(500).json({
-    status: 'error',
-    statusCode,
-    message,
-  })
-}
-
 module.exports = {
-  ErrorHandler,
-  handleError,
+  ErrorObject,
 }
