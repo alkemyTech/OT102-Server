@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Activity',
-    createdAt: 'created_at',
+    createdAt: 'createdAt',
     updatedAt: 'updated_at',
     deletedAt: 'deletedAt',
     paranoid: true,
