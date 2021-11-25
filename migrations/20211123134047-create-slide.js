@@ -34,7 +34,6 @@ module.exports = {
       },
       organizationId: {
         type: Sequelize.INTEGER,
-      
         references: {
           model: 'Organizations',
           key: 'id',
