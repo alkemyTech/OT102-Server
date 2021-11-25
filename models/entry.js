@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Entry.belongsTo(models.Category, { as: 'category' });
+      Entry.belongsTo(models.Category, { foreignKey: 'categoryId' , as: 'category' });
     }
   }
   Entry.init(
@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Entry',
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
       deletedAt: 'deletedAt',
       paranoid: true,
       timestamps: true,

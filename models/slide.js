@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Slide.belongsTo(models.Organization, { as: 'organization' });
+      Slide.belongsTo(models.Organization, {
+        foreignKey: 'organizationId', as:'organizations'
+      });
     }
   }
   Slide.init(
@@ -30,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       organizationId: {
         type: DataTypes.INTEGER,
       },
-      deletedAt :{
-        type :DataTypes.DATE,
-      }
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
