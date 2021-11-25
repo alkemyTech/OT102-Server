@@ -4,11 +4,12 @@ module.exports = {
   get: async (req, res, next) => {
     try {
       const users = await getUsers()
-      res.status(200).json({
+      const response = {
         status: true,
-        msg: 'Users were retrieved successfully.',
-        users,
-      })
+        msg: 'Users retrieved successfully',
+        data: users,
+      }
+      res.status(200).json(response)
     } catch (error) {
       next(error)
     }
