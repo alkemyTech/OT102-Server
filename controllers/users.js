@@ -24,7 +24,7 @@ module.exports = {
       const deletedUser = await deleteUser(req.params.id)
       endpointResponse({
         res,
-        msg: 'Users were retrieved successfully.',
+        msg: 'User were retrieved successfully.',
         body: deletedUser,
       })
     } catch (error) {
