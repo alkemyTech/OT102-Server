@@ -1,5 +1,6 @@
 const { catchAsync } = require('../helpers')
 const { ErrorObject } = require('../helpers/error')
+const { endpointResponse } = require('../helpers/success')
 const { getUsers } = require('../services/user')
 
 module.exports = {
@@ -9,8 +10,8 @@ module.exports = {
       // if (true) {
       //   return next(new ErrorObject('No users were found with that ID', 404))
       // }
-      res.status(200).json({
-        status: true,
+      endpointResponse({
+        res,
         msg: 'Users were retrieved successfully.',
         body: users,
       })
