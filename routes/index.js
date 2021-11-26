@@ -8,6 +8,7 @@ const categoriesRouter = require('./categories')
 const membersRouter = require('./members')
 const entriesRouter = require('./entries')
 const contactsRouter = require('./contacts')
+const testimonialsRouter = require('./testimonials')
 
 router.use('/users', usersRouter)
 router.use('/ping', pingRouter)
@@ -15,5 +16,6 @@ router.use('/categories', categoriesRouter)
 router.use('/members', membersRouter)
 router.use('/news', entriesRouter)
 router.use('/contacts', contactsRouter)
+router.use('/testimonials', testimonialsRouter)
 
 module.exports = router
