@@ -21,7 +21,9 @@ const validate = (req, res, next) => {
     const [error] = errors.array()
     next(
       new ErrorObject(
-        `[Error creating category] - [categories - POST]: ${error.msg}`,
+        `[Error creating ${req.baseUrl.slice(1)}] - [${req.baseUrl} - ${
+          req.method
+        }]: ${error.msg}`,
         400,
       ),
     )
