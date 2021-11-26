@@ -8,3 +8,12 @@ exports.getUsers = async () => {
     throw Error(err.message)
   }
 }
+
+exports.deleteUser = async (id) => {
+  try {
+    const deleteUser = await User.destroy({ where: { id } })
+    return deleteUser
+  } catch (err) {
+    throw Error(err.message)
+  }
+}
