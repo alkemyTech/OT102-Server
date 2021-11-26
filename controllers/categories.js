@@ -29,7 +29,7 @@ module.exports = {
       next(
         new ErrorObject(
           `[Error deleting Category] - [category - delete]: ${error.message}`,
-          404,
+          500,
         ),
       )
     }
