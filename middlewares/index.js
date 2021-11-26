@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator')
+
 const { ErrorObject } = require('../helpers/error')
 
 const validateUser = async (req, res, next) => {
@@ -12,6 +14,23 @@ const validateUser = async (req, res, next) => {
   }
 }
 
+// Validate request
+const validate = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const [error] = errors.array()
+    next(
+      new ErrorObject(
+        `[Error creating category] - [categories - POST]: ${error.msg}`,
+        400,
+      ),
+    )
+  }
+  return next()
+}
+const validateRequest = (schema) => [schema, validate]
+
 module.exports = {
   validateUser,
+  validateRequest,
 }
