@@ -1,4 +1,4 @@
-const Organization = require('../models')
+const { Organization } = require('../models')
 
 exports.getById = async (id) => {
   try {
