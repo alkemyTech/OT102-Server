@@ -16,6 +16,6 @@ exports.updateById = async (id, updatedName, updatedContent) => {
       return updatedTestimonial
     }
   } catch (error) {
-    throw Error('Error while retrieving entry by ID')
+    throw Error(error.message)
   }
 }
