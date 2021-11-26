@@ -1,4 +1,8 @@
-const { getAll } = require('../services/categories')
+const { catchAsync } = require('../helpers')
+const { endpointResponse } = require('../helpers/success')
+const { ErrorObject } = require('../helpers/error')
+
+const { getAll, addCategory } = require('../services/categories')
 
 module.exports = {
   get: async (req, res, next) => {
@@ -14,4 +18,25 @@ module.exports = {
       next(error)
     }
   },
+
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const { name, description } = req.body
+      const newCategory = await addCategory({ name, description })
+
+      endpointResponse({
+        res,
+        message: 'Category were created successfully.',
+        body: newCategory,
+        status: 201,
+      })
+    } catch (error) {
+      next(
+        new ErrorObject(
+          `[Error creating category] - [categories - POST]: ${error.message}`,
+          error.statusCode,
+        ),
+      )
+    }
+  }),
 }
