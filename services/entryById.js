@@ -4,7 +4,6 @@ exports.getById = async (id) => {
   try {
     const entryById = await Entry.findOne({
       where: { id },
-      attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
     })
     // If there aren't any Entries with that ID throw an error message.
     if (!entryById) {
