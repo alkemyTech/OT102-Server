@@ -7,11 +7,19 @@ const { catchAsync } = require('../helpers')
 
 const router = express.Router()
 
+const getMembers = async () => {
+  try {
+    return await Member.findAll()
+  } catch (error) {
+    throw Error(error.message)
+  }
+}
+
 router.get(
   '/',
   catchAsync(async (req, res, next) => {
     try {
-      const allMembers = await Member.findAll()
+      const allMembers = await getMembers()
       endpointResponse({
         res,
         message: 'Members were retrieved successfully.',
