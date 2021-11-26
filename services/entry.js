@@ -4,7 +4,7 @@ exports.getEntries = async () => {
   try {
     const entries = await Entry.findAll({
       attributes: {
-        exclude: ['id', 'content', 'categoryId', 'type', 'updatedAt', 'deletedAt'],
+        exclude: ['updatedAt', 'deletedAt'],
       },
     })
     return entries
