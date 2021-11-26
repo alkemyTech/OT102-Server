@@ -11,6 +11,7 @@ module.exports = {
         req.body.name,
         req.body.content,
       )
+
       endpointResponse({
         res,
         message: 'Testimonial succesfully updated',
@@ -20,7 +21,7 @@ module.exports = {
       next(
         new ErrorObject(
           `[Error retrieving entry by ID] - [testimonial - put]: ${error.message}`,
-          404,
+          500,
         ),
       )
     }
