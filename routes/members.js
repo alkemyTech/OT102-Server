@@ -2,18 +2,10 @@ const express = require('express')
 
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
-const { Member } = require('../models')
 const { catchAsync } = require('../helpers')
+const { getMembers } = require('../services/members')
 
 const router = express.Router()
-
-const getMembers = async () => {
-  try {
-    return await Member.findAll()
-  } catch (error) {
-    throw Error(error.message)
-  }
-}
 
 router.get(
   '/',
