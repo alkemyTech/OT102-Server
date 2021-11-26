@@ -14,7 +14,7 @@ module.exports = {
           name: organization.name,
           image: organization.image,
           phone: organization.phone,
-          adress: organization.adress,
+          address: organization.adress,
           welcomeText: organization.welcomeText,
         },
       })
