@@ -1,19 +1,41 @@
-const { catchAsync } = require('../helpers')
-const { endpointResponse } = require('../helpers/success')
+const { getById, getEntries } = require('../services/entry')
 const { ErrorObject } = require('../helpers/error')
-const { getEntries } = require('../services/entry')
+const { endpointResponse } = require('../helpers/success')
+const { catchAsync } = require('../helpers/index')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
-      const allEntries = await getEntries({ attributes: ['name'] })
+      const allEntries = await getEntries(req.params.type)
       endpointResponse({
         res,
-        msg: 'Entries were retrieved successfully.',
+        message: 'Entries were retrieved successfully.',
         body: allEntries,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving entries] - [entries - get]: ${error.message}`, 404))
+      next(
+        new ErrorObject(
+          `[Error retrieving entries] - [entries - get]: ${error.message}`,
+          404,
+        ),
+      )
+    }
+  }),
+  getEntry: catchAsync(async (req, res, next) => {
+    try {
+      const entry = await getById(req.params.id)
+      endpointResponse({
+        res,
+        message: 'Entry retrieved succesfully!',
+        body: entry,
+      })
+    } catch (error) {
+      next(
+        new ErrorObject(
+          `[Error retrieving entry by ID] - [organization - get]: ${error.message}`,
+          404,
+        ),
+      )
     }
   }),
 }
