@@ -9,8 +9,6 @@ const membersRouter = require('./members')
 const entriesRouter = require('./entries')
 
 const organizationsRouter = require('./organizations')
-const membersRouter = require('./members')
-const entriesRouter = require('./entries')
 const contactsRouter = require('./contacts')
 
 router.use('/users', usersRouter)
