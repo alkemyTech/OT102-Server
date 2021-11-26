@@ -8,10 +8,20 @@ const categoriesRouter = require('./categories')
 const membersRouter = require('./members')
 const entriesRouter = require('./entries')
 
+const organizationsRouter = require('./organizations')
+const membersRouter = require('./members')
+const entriesRouter = require('./entries')
+const contactsRouter = require('./contacts')
+
 router.use('/users', usersRouter)
 router.use('/ping', pingRouter)
 router.use('/categories', categoriesRouter)
 router.use('/members', membersRouter)
 router.use('/news', entriesRouter)
+
+router.use('/organizations', organizationsRouter)
+router.use('/members', membersRouter)
+router.use('/news', entriesRouter)
+router.use('/contacts', contactsRouter)
 
 module.exports = router
