@@ -1,50 +1,24 @@
 // midleware to check if the user.roleId user is admin
 const jwt = require('jsonwebtoken')
 const config = require('../config/config').development
+const ErrorObject = require('../helpers/error')
 
 const isAdmin = (req, res, next) => {
   const token = req.headers['x-access-token']
   if (!token) {
-    return res.status(401).send({ auth: false, message: 'No token provided.' })
+    next(new ErrorObject('No token provided.', 401))
   }
-
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res
-        .status(500)
-        .send({ auth: false, message: 'Failed to authenticate token.' })
+      next(new ErrorObject('Failed to authenticate token.', 401))
     }
-    if (decoded.roleId === 1) {
+    if (decoded.role === 'Admin') {
       next()
     } else {
-      return res
-        .status(403)
-        .send({ auth: false, message: 'You are not an admin' })
+      next(new ErrorObject('You are not an admin', 403))
     }
     return null
   })
   return null
 }
 module.exports = isAdmin
-
-// examples
-
-// route.get('/', isAdmin, (req, res) => {
-//   res.send('You are an admin')
-// })
-
-// token1 = jwt.sign({ id: 1, roleId: 1 }, config.secret, { expiresIn: '1h' })
-// token2 = jwt.sign({ id: 1, roleId: 2 }, config.secret, { expiresIn: '1h' })
-//
-// axios.get('http://localhost:3000/pong/admin', {
-//   headers: {
-//     'x-access-token': token1
-//   }
-// })
-//   .then(res => {
-//     console.log(res.data)
-//   })
-//   .catch(err => {
-//     console.log(err)
-//   })
-//
