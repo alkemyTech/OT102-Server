@@ -36,7 +36,7 @@ exports.userSchema = [
     .exists()
     .withMessage('The password is required a value')
     .isLength({ min: 8 })
-    .withMessage('The firstname must have at least83 characters')
+    .withMessage('The password must have at least 8 characters')
     .matches(passwordChars)
     .withMessage(
       'The password must have one uppercase, one lowercasse, one number and one special caracter',
