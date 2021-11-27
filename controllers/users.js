@@ -1,7 +1,8 @@
+const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
-const { getUsers, deleteUser } = require('../services/user')
+const { getUsers, addUser, deleteUser } = require('../services/user')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -17,6 +18,30 @@ module.exports = {
       })
     } catch (error) {
       next(new ErrorObject(`[Error retrieving users] - [users - get]: ${error.message}`, 404))
+    }
+  }),
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const userFormData = {
+        ...req.body,
+        password: bcryptjs.hashSync(req.body.password, 10),
+        roleId: 2,
+      }
+      const newUser = await addUser(userFormData)
+
+      endpointResponse({
+        res,
+        message: 'User were created successfully.',
+        body: newUser,
+        status: 201,
+      })
+    } catch (error) {
+      next(
+        new ErrorObject(
+          `[Error creating user] - [users - POST]: ${error.message}`,
+          error.statusCode,
+        ),
+      )
     }
   }),
   destroy: catchAsync(async (req, res, next) => {
