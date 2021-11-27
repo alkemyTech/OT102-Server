@@ -17,3 +17,13 @@ exports.deleteUser = async (id) => {
     throw Error(err.message)
   }
 }
+
+exports.addUser = async (data) => {
+  console.log(data)
+  try {
+    const userCreate = await User.create(data)
+    return userCreate
+  } catch (err) {
+    throw Error(err.message)
+  }
+}
