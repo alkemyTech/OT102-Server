@@ -1,4 +1,4 @@
-// const bcryptjs = require('bcryptjs')
+const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
@@ -24,7 +24,7 @@ module.exports = {
     try {
       const userFormData = {
         ...req.body,
-        // password: bcryptjs.hashSync(req.body.password, 10),
+        password: bcryptjs.hashSync(req.body.password, 10),
         roleId: 2,
       }
       const newUser = await addUser(userFormData)
