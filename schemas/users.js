@@ -1,5 +1,5 @@
 const { body } = require('express-validator')
-const { getUserByEmail } = require('../services/auth')
+const { getUserByEmail } = require('../services/user')
 
 const passwordChars = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
 
