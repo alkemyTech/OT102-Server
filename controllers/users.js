@@ -1,5 +1,5 @@
+const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
-const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const { getUsers, deleteUser } = require('../services/user')
 
@@ -12,11 +12,12 @@ module.exports = {
       // }
       endpointResponse({
         res,
-        msg: 'Users were retrieved successfully.',
+        message: 'Users were retrieved successfully.',
         body: users,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving users] - [users - get]: ${error.message}`, 404))
+      const httpError = createHttpError(500, `[Error retrieving users] - [users - get]: ${error.message}`)
+      next(httpError)
     }
   }),
   destroy: catchAsync(async (req, res, next) => {
@@ -24,11 +25,12 @@ module.exports = {
       const deletedUser = await deleteUser(req.params.id)
       endpointResponse({
         res,
-        msg: 'User were deleted successfully.',
+        message: 'User were deleted successfully.',
         body: deletedUser,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error deleting users] - [users - delete]: ${error.message}`, 404))
+      const httpError = createHttpError(404, `[Error deleting User] - [users - delete]: ${error.message}`)
+      next(httpError)
     }
   }),
 }
