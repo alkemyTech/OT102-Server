@@ -12,7 +12,7 @@ module.exports = {
       // }
       endpointResponse({
         res,
-        msg: 'Users were retrieved successfully.',
+        message: 'Users were retrieved successfully.',
         body: users,
       })
     } catch (error) {
@@ -25,7 +25,7 @@ module.exports = {
       const deletedUser = await deleteUser(req.params.id)
       endpointResponse({
         res,
-        msg: 'User were deleted successfully.',
+        message: 'User were deleted successfully.',
         body: deletedUser,
       })
     } catch (error) {
