@@ -1,11 +1,10 @@
 const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
-const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const { getUsers, addUser, deleteUser } = require('../services/user')
 
 module.exports = {
-  get: catchAsync(async (req, res, next) => {
+  get: catchAsync(async (req, res) => {
     try {
       const users = await getUsers()
       // if (true) {
@@ -17,10 +16,10 @@ module.exports = {
         body: users,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving users] - [users - get]: ${error.message}`, 404))
+      res.status(error.statusCode).json(error)
     }
   }),
-  post: catchAsync(async (req, res, next) => {
+  post: catchAsync(async (req, res) => {
     try {
       const userFormData = {
         ...req.body,
@@ -35,15 +34,10 @@ module.exports = {
         status: 201,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error creating user] - [users - POST]: ${error.message}`,
-          error.statusCode,
-        ),
-      )
+      res.status(error.statusCode).json(error)
     }
   }),
-  destroy: catchAsync(async (req, res, next) => {
+  destroy: catchAsync(async (req, res) => {
     try {
       const deletedUser = await deleteUser(req.params.id)
       endpointResponse({
@@ -52,7 +46,7 @@ module.exports = {
         body: deletedUser,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error deleting users] - [users - delete]: ${error.message}`, 404))
+      res.status(error.statusCode).json(error)
     }
   }),
 }
