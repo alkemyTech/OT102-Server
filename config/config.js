@@ -8,7 +8,6 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    secret: process.env.JWT_SECRET_KEY,
   },
   test: {
     username: process.env.DB_USER,
