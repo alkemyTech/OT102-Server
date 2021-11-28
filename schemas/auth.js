@@ -1,9 +1,9 @@
 const { body } = require('express-validator')
-const { getUserByEmail } = require('../services/user')
+const { getUserByEmail } = require('../services/auth')
 
 const passwordChars = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
 
-exports.userSchema = [
+exports.userRegisterSchema = [
   body('firstName')
     .exists()
     .withMessage('The firstname is required a value')
@@ -41,5 +41,4 @@ exports.userSchema = [
     .withMessage(
       'The password must have one uppercase, one lowercasse, one number and one special caracter',
     ),
-  body('image').exists().withMessage('The image is required a value'),
 ]

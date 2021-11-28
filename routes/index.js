@@ -7,11 +7,13 @@ const pingRouter = require('./ping')
 const categoriesRouter = require('./categories')
 const membersRouter = require('./members')
 const entriesRouter = require('./entries')
+const authRouter = require('./auth')
 
 const organizationsRouter = require('./organizations')
 const contactsRouter = require('./contacts')
 
 router.use('/users', usersRouter)
+router.use('/auth', authRouter)
 router.use('/ping', pingRouter)
 router.use('/categories', categoriesRouter)
 router.use('/members', membersRouter)
