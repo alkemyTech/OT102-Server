@@ -47,9 +47,10 @@ module.exports = {
 
       endpointResponse({
         res,
+        code: 201,
+        status: true,
         message: 'Category created successfully.',
         body: newCategory,
-        status: 201,
       })
     } catch (error) {
       res.status(error.statusCode).json(error)
