@@ -13,6 +13,7 @@ const organizationsRouter = require('./organizations')
 const contactsRouter = require('./contacts')
 
 router.use('/users', usersRouter)
+router.use('/auth', authRouter)
 router.use('/ping', pingRouter)
 router.use('/categories', categoriesRouter)
 router.use('/members', membersRouter)
