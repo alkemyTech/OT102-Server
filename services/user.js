@@ -12,6 +12,9 @@ exports.getUsers = async () => {
 exports.deleteUser = async (id) => {
   try {
     const deleteUser = await User.destroy({ where: { id } })
+    if (!deleteUser) {
+      throw new Error('User not found.')
+    }
     return deleteUser
   } catch (err) {
     throw Error(err.message)

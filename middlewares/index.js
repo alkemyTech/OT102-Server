@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator')
+const createHttpError = require('http-errors')
 
 const { ErrorObject } = require('../helpers/error')
 
@@ -18,17 +19,11 @@ const validateUser = async (req, res, next) => {
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    res
-      .status(400)
-      .json(
-        new ErrorObject(
-          `[Error validating ${req.baseUrl.slice(1)}] - [${req.baseUrl} - ${
-            req.method
-          }]`,
-          400,
-          errors.array(),
-        ),
-      )
+    const httpError = createHttpError(400, `[Error validating ${req.baseUrl.slice(1)}] - [${req.baseUrl} - ${
+      req.method
+    }]`)
+    httpError.validationErrors = errors.array()
+    next(httpError)
   }
   next()
 }

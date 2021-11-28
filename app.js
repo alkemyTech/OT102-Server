@@ -3,6 +3,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
+const errorHandlerMiddleware = require('./middlewares/error-handler')
 require('dotenv').config()
 
 const indexRouter = require('./routes/index')
@@ -18,14 +19,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 
-app.use((err, req, res) => {
-  err.statusCode = err.statusCode || 500
-  err.status = err.status || 'error'
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  })
-})
+/**
+ * Any error handler middleware must be
+ * added AFTER you define your routes.
+ */
+app.use(errorHandlerMiddleware)
 
 module.exports = app
