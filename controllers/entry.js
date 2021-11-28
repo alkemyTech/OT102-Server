@@ -1,4 +1,4 @@
-const { getById, getEntries } = require('../services/entry')
+const { getById, getEntries, deleteEntry } = require('../services/entry')
 const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/index')
@@ -36,6 +36,19 @@ module.exports = {
           404,
         ),
       )
+    }
+  }),
+  destroy: catchAsync(async (req, res, next) => {
+    try {
+      const entryId = req.params.id
+      const deletedEntry = await deleteEntry(entryId)
+      endpointResponse({
+        res,
+        msg: 'Entry were deleted successfully.',
+        body: deletedEntry,
+      })
+    } catch (error) {
+      next(new ErrorObject(`[Error deleting Entry] - [Entry - delete]: ${error.message}`, 500))
     }
   }),
 }
