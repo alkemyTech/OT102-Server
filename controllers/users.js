@@ -25,7 +25,6 @@ module.exports = {
       const userFormData = {
         ...req.body,
         password: bcryptjs.hashSync(req.body.password, 10),
-        roleId: 2,
       }
       const newUser = await addUser(userFormData)
 

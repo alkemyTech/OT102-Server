@@ -21,19 +21,19 @@ exports.getUserByEmail = async (email) => {
   }
 }
 
-exports.deleteUser = async (id) => {
+exports.addUser = async (data) => {
   try {
-    const deleteUser = await User.destroy({ where: { id } })
-    return deleteUser
+    const userCreate = await User.create(data)
+    return userCreate
   } catch (err) {
     throw Error(err.message)
   }
 }
 
-exports.addUser = async (data) => {
+exports.deleteUser = async (id) => {
   try {
-    const userCreate = await User.create(data)
-    return userCreate
+    const deleteUser = await User.destroy({ where: { id } })
+    return deleteUser
   } catch (err) {
     throw Error(err.message)
   }
