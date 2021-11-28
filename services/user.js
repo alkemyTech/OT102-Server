@@ -9,6 +9,27 @@ exports.getUsers = async () => {
   }
 }
 
+exports.getUserByEmail = async (email) => {
+  try {
+    const user = await User.findOne({
+      where: { email },
+      atributtes: { include: ['email'] },
+    })
+    return user
+  } catch (err) {
+    throw Error(err.message)
+  }
+}
+
+exports.addUser = async (data) => {
+  try {
+    const createdUser = await User.create(data)
+    return createdUser
+  } catch (err) {
+    throw Error(err.message)
+  }
+}
+
 exports.deleteUser = async (id) => {
   try {
     const deleteUser = await User.destroy({ where: { id } })
