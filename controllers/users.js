@@ -38,7 +38,7 @@ module.exports = {
         status: 201,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving users] - [users - get]: ${error.message}`)
+      const httpError = createHttpError(500, `[Error creating users] - [users - post]: ${error.message}`)
       next(httpError)
     }
   }),
