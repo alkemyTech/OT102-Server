@@ -5,10 +5,6 @@ exports.getAllTestimonials = async () => {
   try {
     return await Testimonial.findAll()
   } catch (error) {
-    throw new ErrorObject(
-      `[Error retreaving testimonials] - [] - ${error.message}`,
-      500,
-      [error],
-    )
+    throw new ErrorObject(error.message, 500)
   }
 }
