@@ -1,3 +1,5 @@
+const createHttpError = require('http-errors')
+
 const { catchAsync } = require('../helpers')
 const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
@@ -40,7 +42,7 @@ module.exports = {
     }
   }),
 
-  post: catchAsync(async (req, res) => {
+  post: catchAsync(async (req, res, next) => {
     try {
       const { name, description } = req.body
       const newCategory = await addCategory({ name, description })
@@ -53,7 +55,8 @@ module.exports = {
         body: newCategory,
       })
     } catch (error) {
-      res.status(error.statusCode).json(error)
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
     }
   }),
 }

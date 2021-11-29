@@ -19,9 +19,12 @@ const validateUser = async (req, res, next) => {
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    const httpError = createHttpError(400, `[Error validating ${req.baseUrl.slice(1)}] - [${req.baseUrl} - ${
-      req.method
-    }]`)
+    const httpError = createHttpError(
+      400,
+      `[Error validating ${req.baseUrl.slice(1)}] - [${req.baseUrl} - ${
+        req.method
+      }]`,
+    )
     httpError.validationErrors = errors.array()
     next(httpError)
   }
