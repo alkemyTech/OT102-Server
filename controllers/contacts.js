@@ -9,7 +9,7 @@ module.exports = {
       const contacts = await getContacts()
       endpointResponse({
         res,
-        msg: 'Contacts were retrieved successfully.',
+        message: 'Contacts were retrieved successfully.',
         body: contacts,
       })
     } catch (error) {
