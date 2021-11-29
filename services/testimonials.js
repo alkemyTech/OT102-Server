@@ -1,9 +1,9 @@
 const { ErrorObject } = require('../helpers/error')
-const { Entry } = require('../models')
+const { Testimonial } = require('../models')
 
 exports.updateById = async (id, name, content) => {
   try {
-    const testimonial = await Entry.findByPk(id)
+    const testimonial = await Testimonial.findByPk(id)
 
     if (!testimonial) {
       throw Error('Not found')
