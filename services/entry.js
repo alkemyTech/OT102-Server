@@ -28,15 +28,11 @@ exports.getById = async (id) => {
 
 exports.deleteEntry = async (id) => {
   try {
-    const entry = await Entry.findOne({
-      where: { id },
-    })
-    if (!entry) {
-      throw Error(`ID ${id} already deleted.`)
-    } else {
-      const deleteEntry = await Entry.destroy({ where: { id } })
-      return deleteEntry
+    const deleteEntry = await Entry.destroy({ where: { id } })
+    if (!deleteEntry) {
+      throw new Error('Entry not found.')
     }
+    return deleteEntry
   } catch (err) {
     throw Error(err.message)
   }
