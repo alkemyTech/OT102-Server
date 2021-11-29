@@ -39,9 +39,9 @@ exports.addCategory = async (data) => {
     return { id, name, description }
   } catch (error) {
     if (error.name === 'SequelizeUniqueConstraintError') {
-      throw new ErrorObject(409, 'The category already exist') // 409 conflict
+      throw new ErrorObject('The category already exist', 409) // 409 conflict
     } else if (error.name === 'SequelizeConnectionRefusedError') {
-      throw new ErrorObject(500, 'Error connecting database')
+      throw new ErrorObject('Error connecting database', 500)
     }
     throw new ErrorObject(error.message)
   }
