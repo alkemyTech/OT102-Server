@@ -1,3 +1,4 @@
+const { ErrorObject } = require('../helpers/error')
 const { Category } = require('../models')
 
 exports.getAll = async () => {
@@ -29,5 +30,19 @@ exports.deleteCategory = async (id) => {
     }
   } catch (error) {
     throw Error(error.message)
+  }
+}
+
+exports.addCategory = async (data) => {
+  try {
+    const { id, name, description } = await Category.create(data)
+    return { id, name, description }
+  } catch (error) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new ErrorObject('The category already exist', 409) // 409 conflict
+    } else if (error.name === 'SequelizeConnectionRefusedError') {
+      throw new ErrorObject('Error connecting database', 500)
+    }
+    throw new ErrorObject(error.message)
   }
 }
