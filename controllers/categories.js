@@ -13,7 +13,7 @@ module.exports = {
       const categories = await getAll()
       const response = {
         status: true,
-        msg: 'Categories retrieved successfully',
+        message: 'Categories retrieved successfully',
         data: categories,
       }
       res.status(200).json(response)
@@ -27,7 +27,7 @@ module.exports = {
       const deletedCategory = await deleteCategory(req.params.id)
       endpointResponse({
         res,
-        msg: 'Category was succesfully deleted',
+        message: 'Category was succesfully deleted',
         body: deletedCategory,
       })
     } catch (error) {
