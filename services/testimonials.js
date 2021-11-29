@@ -1,26 +1,18 @@
 const { ErrorObject } = require('../helpers/error')
 const { Entry } = require('../models')
 
-exports.updateById = async (id, updatedName, updatedContent) => {
-  let updatedTestimonial = {}
+exports.updateById = async (id, name, content) => {
   try {
-    const testimonialById = await Entry.findOne({
-      where: { id },
-    })
+    const testimonial = await Entry.findByPk(id)
 
-    if (!testimonialById) {
+    if (!testimonial) {
       throw Error('Not found')
     }
 
-    await Entry.update(
-      { name: updatedName, content: updatedContent },
-      { where: { id } },
-    )
+    testimonial.set({ id, name, content })
+    testimonial.save()
 
-    // Requirements are to return the updated entry's data upon success:
-    updatedTestimonial = await Entry.findOne({ where: { id } })
-
-    return updatedTestimonial
+    return testimonial
   } catch (error) {
     if (error.message === 'Not found') {
       throw new ErrorObject('No Testimonial found with that ID', 404)
