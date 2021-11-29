@@ -1,5 +1,5 @@
+const createHttpError = require('http-errors')
 const { updateById } = require('../services/testimonials')
-const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/index')
 
@@ -18,12 +18,8 @@ module.exports = {
         body: updatedTestimonial,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error retrieving entry by ID] - [testimonial - put]: ${error.message}`,
-          500,
-        ),
-      )
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
     }
   }),
 }
