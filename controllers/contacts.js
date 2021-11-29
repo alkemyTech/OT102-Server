@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
@@ -31,16 +32,12 @@ module.exports = {
       })
       endpointResponse({
         res,
-        msg: 'Contact was added successfully.',
+        message: 'Contact was added successfully.',
         body: contact,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error adding contact] - [contacts - add]: ${error.message}`,
-          404,
-        ),
-      )
+      const httpError = createHttpError(500, `[Error adding contact] - [contacts - put]: ${error.message}`)
+      next(httpError)
     }
   }),
 }

@@ -1,4 +1,4 @@
-const { ErrorObject } = require('../helpers/error')
+const createHttpError = require('http-errors')
 const { Contact } = require('../models')
 
 exports.getContacts = async () => {
@@ -14,6 +14,7 @@ exports.addContact = async (contact) => {
     const newContact = await Contact.create(contact)
     return newContact
   } catch (err) {
-    throw new ErrorObject(err.message, 400)
+    const httpError = createHttpError(400, err.message)
+    throw httpError
   }
 }
