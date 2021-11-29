@@ -18,13 +18,10 @@ exports.addMember = async (data) => {
       throw new ErrorObject(
         '[Error creating member] [] - The member already exist',
         409, // status 409 Conflict
-        error.errors,
       )
+    } else if (error.name === 'SequelizeConnectionRefusedError') {
+      throw new ErrorObject('Error connecting database', 500)
     }
-    throw new ErrorObject(
-      `[Error creating member] - [] - ${error.message}`,
-      500,
-      [error],
-    )
+    throw new ErrorObject(error.message, 500)
   }
 }
