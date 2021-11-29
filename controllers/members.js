@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
@@ -30,12 +31,8 @@ module.exports = {
         body: deletedMember,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error deleting Member] - [memeber - delete]: ${error.message}`,
-          500,
-        ),
-      )
+      const httpError = createHttpError(500, `[Error deleting members] - [members - delete]: ${error.message}`)
+      next(httpError)
     }
   }),
 }
