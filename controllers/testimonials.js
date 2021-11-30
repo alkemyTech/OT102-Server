@@ -24,6 +24,7 @@ module.exports = {
       next(httpError)
     }
   }),
+
   updateTestimonial: catchAsync(async (req, res, next) => {
     try {
       const updatedTestimonial = await updateById(
