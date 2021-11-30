@@ -38,7 +38,7 @@ exports.deleteActivity = async (id) => {
       where: { id },
     })
     if (!activity) {
-      throw Error(`ID ${id} already deleted.`)
+      throw Error(`ID ${id} not exist.`)
     } else {
       const deleteActivity = await Activity.destroy({ where: { id } })
       return deleteActivity
