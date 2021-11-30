@@ -14,6 +14,24 @@ exports.getAll = async () => {
   }
 }
 
+exports.updateCategory = async (data) => {
+  const { id, name, description } = data
+  try {
+    const category = await Category.findByPk(id)
+    if (category === null) {
+      throw Error('not found')
+    }
+    category.set({ id, name, description })
+    category.save()
+    return category
+  } catch (error) {
+    if (error.message === 'not found') {
+      throw new ErrorObject('Category not found', 404)
+    }
+    throw new ErrorObject(error.message, 500)
+  }
+}
+
 exports.deleteCategory = async (id) => {
   try {
     // Check if category exists per ticket requirement:
