@@ -2,7 +2,10 @@ const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getActivities, getById, deleteActivity, addActivity,
+  getActivities,
+  getById,
+  deleteActivity,
+  addActivity,
 } = require('../services/activities')
 
 module.exports = {

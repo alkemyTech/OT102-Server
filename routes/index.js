@@ -1,5 +1,6 @@
 const express = require('express')
 
+const activitiesRouter = require('./activities')
 const categoriesRouter = require('./categories')
 const contactsRouter = require('./contacts')
 const entriesRouter = require('./entries')
@@ -11,6 +12,7 @@ const usersRouter = require('./user')
 
 const router = new express.Router()
 
+router.use('/activities', activitiesRouter)
 router.use('/categories', categoriesRouter)
 router.use('/contacts', contactsRouter)
 router.use('/members', membersRouter)
