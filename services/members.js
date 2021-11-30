@@ -22,6 +22,8 @@ exports.deleteMember = async (id) => {
     }
   } catch (error) {
     throw Error(error.message)
+  }
+}
 exports.addMember = async (data) => {
   try {
     const { id, name, image } = await Member.create(data)
