@@ -3,7 +3,7 @@ const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
-const { addMember, getMembers } = require('../services/members')
+const { addMember ,getMembers, deleteMember } = require('../services/members')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -21,6 +21,20 @@ module.exports = {
           500,
         ),
       )
+    }
+  }),
+  
+  destroy: catchAsync(async (req, res, next) => {
+    try {
+      const deletedMember = await deleteMember(req.params.id)
+      endpointResponse({
+        res,
+        message: 'Member succesfully deleted',
+        body: deletedMember,
+      })
+    } catch (error) {
+      const httpError = createHttpError(500, `[Error deleting members] - [members - delete]: ${error.message}`)
+      next(httpError)
     }
   }),
 
