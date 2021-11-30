@@ -8,6 +8,7 @@ exports.getAllTestimonials = async () => {
     throw new ErrorObject(error.message, 500)
   }
 }
+
 exports.updateById = async (id, name, content) => {
   try {
     const testimonial = await Testimonial.findByPk(id)
@@ -24,6 +25,14 @@ exports.updateById = async (id, name, content) => {
     if (error.message === 'Not found') {
       throw new ErrorObject('No Testimonial found with that ID', 404)
     }
+    throw new ErrorObject(error.message)
+  }
+}
+
+exports.deleteTestimonial = async (id) => {
+  try {
+    return await Testimonial.destroy({ where: { id } })
+  } catch (error) {
     throw new ErrorObject(error.message)
   }
 }
