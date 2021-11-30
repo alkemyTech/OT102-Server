@@ -1,6 +1,9 @@
 const express = require('express')
 
-const { get, destroy, update } = require('../controllers/categories')
+const {
+  get, destroy, post, update,
+} = require('../controllers/categories')
+
 const { validateRequest } = require('../middlewares')
 
 const { categorySchema } = require('../schemas/categories')
@@ -13,5 +16,7 @@ router.get('/', get)
 router.delete('/:id', destroy)
 // Update Category by ID:
 router.put('/:id', validateRequest(categorySchema), update)
+// Add category
+router.post('/', validateRequest(categorySchema), post)
 
 module.exports = router
