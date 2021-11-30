@@ -25,3 +25,15 @@ exports.getById = async (id) => {
     throw Error('Error while retrieving entry by ID')
   }
 }
+
+exports.deleteEntry = async (id) => {
+  try {
+    const deleteEntry = await Entry.destroy({ where: { id } })
+    if (!deleteEntry) {
+      throw new Error('Entry not found.')
+    }
+    return deleteEntry
+  } catch (err) {
+    throw Error(err.message)
+  }
+}

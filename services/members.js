@@ -9,6 +9,21 @@ exports.getMembers = async () => {
   }
 }
 
+exports.deleteMember = async (id) => {
+  try {
+    const findMember = await Member.findOne({
+      where: { id },
+    })
+    if (!findMember) {
+      throw Error('Member already deleted/Invalid ID')
+    } else {
+      const deletedMember = await Member.destroy({ where: { id } })
+      return deletedMember
+    }
+  } catch (error) {
+    throw Error(error.message)
+  }
+}
 exports.addMember = async (data) => {
   try {
     const { id, name, image } = await Member.create(data)
