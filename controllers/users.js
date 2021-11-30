@@ -2,7 +2,9 @@ const createHttpError = require('http-errors')
 const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
-const { getUsers, addUser, deleteUser } = require('../services/user')
+const {
+  getUsers, getUserByEmail, addUser, deleteUser,
+} = require('../services/user')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -17,7 +19,10 @@ module.exports = {
         body: users,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving users] - [users - get]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error retrieving users] - [users - get]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
@@ -38,10 +43,42 @@ module.exports = {
         status: 201,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error creating users] - [users - post]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error creating users] - [users - post]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
+  loginUser: catchAsync(async (req, res, next) => {
+    try {
+      const { email, password } = req.body
+      const user = getUserByEmail(email)
+      if (!user) {
+        throw new Error('Invalid user')
+      } else {
+        const encriptedPassword = bcryptjs.compareSync(password, user.password)
+        if (encriptedPassword) {
+          endpointResponse({
+            res,
+            message: 'User logged',
+            body: user,
+            status: 201,
+          })
+        } else {
+          throw new Error('Invalid password')
+        }
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        500,
+        `[Error logging users] - [users - post]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   destroy: catchAsync(async (req, res, next) => {
     try {
       const deletedUser = await deleteUser(req.params.id)
@@ -51,7 +88,10 @@ module.exports = {
         body: deletedUser,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error deleting User] - [users - delete]: ${error.message}`)
+      const httpError = createHttpError(
+        404,
+        `[Error deleting User] - [users - delete]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
