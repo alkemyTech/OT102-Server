@@ -31,6 +31,10 @@ exports.updateById = async (id, name, content) => {
 
 exports.deleteTestimonial = async (id) => {
   try {
+    const testimonial = await Testimonial.findByPk(id)
+    if (!testimonial) {
+      throw Error('Testimonial already deleted')
+    }
     return await Testimonial.destroy({ where: { id } })
   } catch (error) {
     throw new ErrorObject(error.message)
