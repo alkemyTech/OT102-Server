@@ -21,7 +21,7 @@ module.exports = {
       next(httpError)
     }
   }),
-  post: catchAsync(async (req, res, next) => {
+  createUser: catchAsync(async (req, res, next) => {
     try {
       const { password } = req.body
       const encryptedPassword = bcryptjs.hashSync(password, 10)
