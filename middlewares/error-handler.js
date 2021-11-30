@@ -16,10 +16,13 @@ function getErrorMessage(error) {
   * contains the most detail about an error:
   * an error message and a function call stack.
   */
+
   if (error.stack) {
     return {
       message: error.message,
       stack: error.stack,
+      // errors coming from validation schemas for parameters
+      errors: error.validationErrors || null,
     }
   }
 
