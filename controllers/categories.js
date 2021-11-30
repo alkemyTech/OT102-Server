@@ -6,6 +6,7 @@ const { endpointResponse } = require('../helpers/success')
 const {
   getAll,
   deleteCategory,
+  updateCategory,
   addCategory,
 } = require('../services/categories')
 
@@ -53,6 +54,24 @@ module.exports = {
         status: true,
         message: 'Category created successfully.',
         body: newCategory,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
+    }
+  }),
+
+  update: catchAsync(async (req, res, next) => {
+    const { name, description } = req.body
+    const { id } = req.params
+    try {
+      const updatedCategory = await updateCategory({ id, name, description })
+      endpointResponse({
+        res,
+        code: 200,
+        status: true,
+        message: 'Category was succesfully updated',
+        body: updatedCategory,
       })
     } catch (error) {
       const httpError = createHttpError(error.statusCode, error.message)
