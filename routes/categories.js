@@ -1,9 +1,7 @@
 const express = require('express')
 
 const {
-  get,
-  destroy,
-  post, update,
+  get, destroy, post, update,
 } = require('../controllers/categories')
 
 const { validateRequest } = require('../middlewares')
@@ -14,8 +12,8 @@ const router = new express.Router()
 
 // Get Categories listing:
 router.get('/', get)
-// Delete Category by ID:
-router.delete('/:id', destroy)
+// Delete Category by ID. Route only accessible for admins:
+router.delete('/:id', isAdmin, destroy)
 // Update Category by ID:
 router.put('/:id', [isAdmin, validateRequest(categorySchema)], update)
 // Add category
