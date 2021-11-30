@@ -3,7 +3,7 @@ const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
-const { addMember, getMembers } = require('../services/members')
+const { addMember, getMembers, updateMember } = require('../services/members')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -34,6 +34,24 @@ module.exports = {
         status: true,
         message: 'Member created successfully.',
         body: newMember,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
+    }
+  }),
+
+  update: catchAsync(async (req, res, next) => {
+    const { name, image } = req.body
+    const { id } = req.params
+    try {
+      const updatedMember = await updateMember({ id, name, image })
+      endpointResponse({
+        res,
+        code: 200,
+        status: true,
+        message: 'Member was succesfully updated',
+        body: updatedMember,
       })
     } catch (error) {
       const httpError = createHttpError(error.statusCode, error.message)
