@@ -19,8 +19,15 @@ exports.getById = async (id) => {
       where: { id },
     })
 
+    if (!activityById) {
+      throw Error('Not found')
+    }
+
     return activityById
   } catch (error) {
+    if (error.message === 'Not found') {
+      throw Error('No activity found with that ID', 404)
+    }
     throw Error('Error while retrieving activity by ID')
   }
 }
