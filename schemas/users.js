@@ -30,7 +30,10 @@ exports.userRegisterSchema = [
     .withMessage('Invalid email format')
     .custom((value) => getUserByEmail(value).then((user) => {
       if (user) {
-        const httpError = createHttpError(500, '[Error retrieving users] - [users - get]: mail alredy in use')
+        const httpError = createHttpError(
+          500,
+          '[Error retrieving users] - [users - get]: mail alredy in use',
+        )
         throw httpError
       }
     })),
@@ -43,4 +46,15 @@ exports.userRegisterSchema = [
     .withMessage(
       'The password must have one uppercase, one lowercasse, one number and one special caracter',
     ),
+]
+
+exports.userLoginSchema = [
+  body('email')
+    .exists()
+    .withMessage('The email is required a value')
+    .isEmail()
+    .withMessage('Invalid email format'),
+  body('password')
+    .exists()
+    .withMessage('The password is required a value'),
 ]

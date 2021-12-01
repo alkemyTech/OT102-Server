@@ -51,23 +51,23 @@ module.exports = {
     }
   }),
 
-  loginUser: catchAsync(async (req, res, next) => {
+  login: catchAsync(async (req, res, next) => {
     try {
       const { email, password } = req.body
-      const user = getUserByEmail(email)
+      const user = await getUserByEmail(email)
       if (!user) {
-        throw new Error('Invalid user')
+        throw new Error('Invalid user/password')
       } else {
-        const encriptedPassword = bcryptjs.compareSync(password, user.password)
-        if (encriptedPassword) {
+        const decriptedPassword = bcryptjs.compareSync(password, user.password)
+        if (decriptedPassword) {
           endpointResponse({
             res,
-            message: 'User logged',
+            message: 'User logged succesfully',
             body: user,
             status: 201,
           })
         } else {
-          throw new Error('Invalid password')
+          throw new Error('Invalid user/password')
         }
       }
     } catch (error) {

@@ -13,7 +13,6 @@ exports.getUserByEmail = async (email) => {
   try {
     const user = await User.findOne({
       where: { email },
-
     })
     return user
   } catch (err) {
