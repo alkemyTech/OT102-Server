@@ -1,5 +1,10 @@
 const createHttpError = require('http-errors')
-const { getById, getEntries, deleteEntry } = require('../services/entry')
+const {
+  getById,
+  getEntries,
+  deleteEntry,
+  newEntry,
+} = require('../services/entry')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
 const { catchAsync } = require('../helpers/index')
@@ -46,6 +51,25 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(404, `[Error deleting entry] - [entry - delete]: ${error.message}`)
+      next(httpError)
+    }
+  }),
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const entry = await newEntry({
+        name: req.body.name,
+        content: req.body.content,
+        image: req.body.image,
+        categoryId: req.body.categoryId,
+        type: 'news',
+      })
+      endpointResponse({
+        res,
+        message: 'Entry added correctly.',
+        body: entry,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
       next(httpError)
     }
   }),

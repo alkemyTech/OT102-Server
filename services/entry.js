@@ -37,3 +37,18 @@ exports.deleteEntry = async (id) => {
     throw Error(err.message)
   }
 }
+
+exports.newEntry = async (data) => {
+  try {
+    const newEntry = await Entry.create({
+      name: data.name,
+      content: data.content,
+      image: data.image,
+      categoryId: data.categoryId,
+      type: data.type,
+    })
+    return newEntry
+  } catch (error) {
+    throw Error(error.message)
+  }
+}
