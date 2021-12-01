@@ -1,4 +1,3 @@
-const { ErrorObject } = require('../helpers/error')
 const { Activity } = require('../models')
 
 exports.getActivities = async () => {
@@ -76,8 +75,8 @@ exports.updateActivity = async (id, name, image, content) => {
     return activity
   } catch (error) {
     if (error.message === 'ID not found.') {
-      throw new ErrorObject('activity not found with that ID', 404)
+      throw new Error('activity not found with that ID', 404)
     }
-    throw new ErrorObject(error.message, 500)
+    throw new Error(error.message, 500)
   }
 }
