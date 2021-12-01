@@ -1,7 +1,6 @@
 const createHttpError = require('http-errors')
 const { getById, getEntries, deleteEntry } = require('../services/entry')
 const { endpointResponse } = require('../helpers/success')
-const { ErrorObject } = require('../helpers/error')
 const { catchAsync } = require('../helpers/index')
 
 module.exports = {
@@ -14,7 +13,10 @@ module.exports = {
         body: allEntries,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving entries] - [entries - get]: ${error.message}`)
+      const httpError = createHttpError(
+        error.status,
+        `[Error retrieving entries] - [entries - get]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
@@ -27,12 +29,11 @@ module.exports = {
         body: entry,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error retrieving entry by ID] - [organization - get]: ${error.message}`,
-          404,
-        ),
+      const httpError = createHttpError(
+        error.status,
+        `[Error retrieving entry by ID] - [organization - get]: ${error.message}`,
       )
+      next(httpError)
     }
   }),
   destroy: catchAsync(async (req, res, next) => {
@@ -45,7 +46,28 @@ module.exports = {
         body: deletedEntry,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error deleting entry] - [entry - delete]: ${error.message}`)
+      const httpError = createHttpError(
+        error.status,
+        `[Error deleting entry] - [entry - delete]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+  updatedEntry: catchAsync(async (req, res, next) => {
+    try {
+      const entryId = req.params.id
+      const newEntry = req.body.entry
+      const updatedEntry = await getById(entryId, newEntry)
+      endpointResponse({
+        res,
+        message: 'Entry updated successfully.',
+        body: updatedEntry,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.status,
+        `[Error updating entry] - [entry - update]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
