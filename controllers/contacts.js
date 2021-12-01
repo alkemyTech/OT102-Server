@@ -38,10 +38,7 @@ module.exports = {
         body: contact,
       })
     } catch (error) {
-      const httpError = createHttpError(
-        500,
-        `[Error adding contact] - [contacts - put]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.status, `[Error adding contact] - [contacts - put]: ${error.message}`)
       next(httpError)
     }
   }),
