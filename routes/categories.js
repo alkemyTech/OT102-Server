@@ -13,7 +13,7 @@ const { categorySchema } = require('../schemas/categories')
 const router = new express.Router()
 
 // Get Categories listing:
-router.get('/', get)
+router.get('/', isAdmin, get)
 // Delete Category by ID:
 router.delete('/:id', destroy)
 // Update Category by ID:
