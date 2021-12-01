@@ -6,7 +6,8 @@ exports.getContacts = async () => {
     const contacts = await Contact.findAll()
     return contacts
   } catch (err) {
-    throw Error(err.message)
+    const httpError = createHttpError(400, err.message)
+    throw httpError
   }
 }
 exports.addContact = async (contact) => {
