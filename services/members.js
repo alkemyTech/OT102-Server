@@ -40,3 +40,21 @@ exports.addMember = async (data) => {
     throw new ErrorObject(error.message, 500)
   }
 }
+
+exports.updateMember = async (data) => {
+  const { id, name, image } = data
+  try {
+    const member = await Member.findByPk(id)
+    if (member === null) {
+      throw Error('not found')
+    }
+    member.set({ name, image })
+    member.save()
+    return member
+  } catch (error) {
+    if (error.message === 'not found') {
+      throw new ErrorObject('Member not found', 404)
+    }
+    throw new ErrorObject(error.message, 500)
+  }
+}

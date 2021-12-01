@@ -1,5 +1,5 @@
+const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
-const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const { getContacts } = require('../services/contacts')
 
@@ -13,7 +13,8 @@ module.exports = {
         body: contacts,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving contacts] - [contacts - get]: ${error.message}`, 404))
+      const httpError = createHttpError(500, `[Error retrieving contacts] - [contacts - get]: ${error.message}`)
+      next(httpError)
     }
   }),
 }
