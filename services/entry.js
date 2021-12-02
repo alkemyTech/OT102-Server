@@ -12,7 +12,7 @@ exports.getEntries = async () => {
     return entries
   } catch (err) {
     const httpError = createHttpError(
-      400,
+      500,
       `Error while getting entries: ${err.message}`,
     )
     throw httpError
@@ -53,18 +53,18 @@ exports.deleteEntry = async (id) => {
 
 exports.updateById = async (id, entry) => {
   try {
-    const filter = {
-      where: { id },
-    }
-    const updateEntry = await Entry.update(entry, filter)
+    const updateEntry = await Entry.findByPk(id)
     if (!updateEntry) {
       const httpError = createHttpError(404, 'News not found.')
       throw httpError
     }
+    updateEntry.set(entry)
+    await updateEntry.save()
+
     return updateEntry
   } catch (err) {
     const httpError = createHttpError(
-      400,
+      err.statusCode || 500,
       `Error while updating entry: ${err.message}`,
     )
     throw httpError

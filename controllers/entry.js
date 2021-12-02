@@ -1,5 +1,10 @@
 const createHttpError = require('http-errors')
-const { getById, getEntries, deleteEntry } = require('../services/entry')
+const {
+  getById,
+  getEntries,
+  deleteEntry,
+  updateById,
+} = require('../services/entry')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/index')
 
@@ -57,7 +62,7 @@ module.exports = {
     try {
       const entryId = req.params.id
       const newEntry = req.body.entry
-      const updatedEntry = await getById(entryId, newEntry)
+      const updatedEntry = await updateById(entryId, newEntry)
       endpointResponse({
         res,
         message: 'Entry updated successfully.',
@@ -66,7 +71,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.status,
-        `[Error updating entry] - [entry - update]: ${error.message}`,
+        `[Error updating entry] - [entry-PUT]: ${error.message}`,
       )
       next(httpError)
     }
