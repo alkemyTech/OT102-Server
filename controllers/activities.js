@@ -79,7 +79,7 @@ module.exports = {
         body: updatedActivity,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error updating activity] - [activity - put]: ${error.message}`)
+      const httpError = createHttpError(error.statusCode, `[Error updating activity] - [activity - put]: ${error.message}`)
       next(httpError)
     }
   }),
