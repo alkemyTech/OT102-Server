@@ -5,6 +5,7 @@ const { endpointResponse } = require('../helpers/success')
 const {
   getUsers, getUserByEmail, addUser, deleteUser,
 } = require('../services/user')
+const { generateToken } = require('../middlewares/jwt')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -55,25 +56,34 @@ module.exports = {
     try {
       const { email, password } = req.body
       const user = await getUserByEmail(email)
+      const token = generateToken(user)
       if (!user) {
-        throw new Error(500, 'Invalid user/password')
+        const httpError = createHttpError(
+          500,
+          '[Error creating users] - [users - post]: Invalid credentials',
+        )
+        next(httpError)
       } else {
         const decriptedPassword = bcryptjs.compareSync(password, user.password)
         if (decriptedPassword) {
           endpointResponse({
             res,
             message: 'User logged succesfully',
-            body: user,
+            body: { token, user },
             status: 201,
           })
         } else {
-          throw new Error(500, 'Invalid user/password')
+          const httpError = createHttpError(
+            500,
+            '[Error creating users] - [users - post]: Invalid credentials',
+          )
+          next(httpError)
         }
       }
     } catch (error) {
       const httpError = createHttpError(
         error.status,
-        `[Error logging users] - [users - post]: ${error.message}`,
+        '[Error logging users] - [users - post]: Invalid credentials',
       )
       next(httpError)
     }
