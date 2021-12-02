@@ -4,7 +4,9 @@ const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
 
-const { addMember, deleteMember, getMembers, updateMember } = require('../services/members')
+const {
+  addMember, deleteMember, getMembers, updateMember,
+} = require('../services/members')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {

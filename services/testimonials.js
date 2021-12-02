@@ -40,3 +40,24 @@ exports.deleteTestimonial = async (id) => {
     throw new ErrorObject(error.message)
   }
 }
+
+exports.addTestimonial = async (data) => {
+  try {
+    const {
+      id, name, image, content,
+    } = await Testimonial.create(data)
+    return {
+      id,
+      name,
+      image,
+      content,
+    }
+  } catch (error) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new ErrorObject('Testimonial already exists', 409)
+    } else if (error.name === 'SequelizeConnectionRefusedError') {
+      throw new ErrorObject('Error connecting to database', 500)
+    }
+    throw new ErrorObject(error.message)
+  }
+}
