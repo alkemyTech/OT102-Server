@@ -1,6 +1,7 @@
-const { getById, getEntries } = require('../services/entry')
-const { ErrorObject } = require('../helpers/error')
+const createHttpError = require('http-errors')
+const { getById, getEntries, deleteEntry } = require('../services/entry')
 const { endpointResponse } = require('../helpers/success')
+const { ErrorObject } = require('../helpers/error')
 const { catchAsync } = require('../helpers/index')
 
 module.exports = {
@@ -13,12 +14,8 @@ module.exports = {
         body: allEntries,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error retrieving entries] - [entries - get]: ${error.message}`,
-          404,
-        ),
-      )
+      const httpError = createHttpError(500, `[Error retrieving entries] - [entries - get]: ${error.message}`)
+      next(httpError)
     }
   }),
   getEntry: catchAsync(async (req, res, next) => {
@@ -36,6 +33,20 @@ module.exports = {
           404,
         ),
       )
+    }
+  }),
+  destroy: catchAsync(async (req, res, next) => {
+    try {
+      const entryId = req.params.id
+      const deletedEntry = await deleteEntry(entryId)
+      endpointResponse({
+        res,
+        message: 'Entry were deleted successfully.',
+        body: deletedEntry,
+      })
+    } catch (error) {
+      const httpError = createHttpError(404, `[Error deleting entry] - [entry - delete]: ${error.message}`)
+      next(httpError)
     }
   }),
 }

@@ -1,7 +1,12 @@
+const createHttpError = require('http-errors')
+
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
-const { getMembers } = require('../services/members')
+
+const {
+  addMember, deleteMember, getMembers, updateMember,
+} = require('../services/members')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -13,12 +18,59 @@ module.exports = {
         body: allMembers,
       })
     } catch (error) {
-      next(
-        new ErrorObject(
-          `[Error retrieving members] - [members - get]: ${error.message}`,
-          500,
-        ),
+      next(new ErrorObject(`[Error retrieving members] - [members - get]: ${error.message}`, 500))
+    }
+  }),
+
+  destroy: catchAsync(async (req, res, next) => {
+    try {
+      const deletedMember = await deleteMember(req.params.id)
+      endpointResponse({
+        res,
+        message: 'Member succesfully deleted',
+        body: deletedMember,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        500,
+        `[Error deleting members] - [members - delete]: ${error.message}`,
       )
+      next(httpError)
+    }
+  }),
+
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const { name, image } = req.body
+      const newMember = await addMember({ name, image })
+      endpointResponse({
+        res,
+        code: 201,
+        status: true,
+        message: 'Member created successfully.',
+        body: newMember,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
+    }
+  }),
+
+  update: catchAsync(async (req, res, next) => {
+    const { name, image } = req.body
+    const { id } = req.params
+    try {
+      const updatedMember = await updateMember({ id, name, image })
+      endpointResponse({
+        res,
+        code: 200,
+        status: true,
+        message: 'Member was succesfully updated',
+        body: updatedMember,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
     }
   }),
 }
