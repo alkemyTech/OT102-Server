@@ -56,7 +56,7 @@ module.exports = {
       const { email, password } = req.body
       const user = await getUserByEmail(email)
       if (!user) {
-        throw new Error('Invalid user/password')
+        throw new Error(500, 'Invalid user/password')
       } else {
         const decriptedPassword = bcryptjs.compareSync(password, user.password)
         if (decriptedPassword) {
@@ -67,12 +67,12 @@ module.exports = {
             status: 201,
           })
         } else {
-          throw new Error('Invalid user/password')
+          throw new Error(500, 'Invalid user/password')
         }
       }
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.status,
         `[Error logging users] - [users - post]: ${error.message}`,
       )
       next(httpError)
