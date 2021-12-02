@@ -66,7 +66,7 @@ module.exports = {
             res,
             message: 'User logged succesfully',
             body: { token, user },
-            status: 201,
+            status: 200,
           })
         } else {
           throw new Error(400, 'Invalid credentials')
