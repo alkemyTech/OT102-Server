@@ -56,7 +56,7 @@ exports.getUserById = async (id) => {
     const user = await User.findByPk(id, {
       attributes,
       include: {
-        // includer other table
+        // includes other table
         model: Role, // model name
         as: 'role', // model alias
         attributes: [], // we don't want any atributes
