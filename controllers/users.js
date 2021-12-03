@@ -3,7 +3,7 @@ const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getUsers, getUserByEmail, addUser, deleteUser,
+  getUsers, getUserByEmail, addUser, deleteUser, getUserById,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
 
@@ -55,7 +55,8 @@ module.exports = {
   login: catchAsync(async (req, res, next) => {
     try {
       const { email, password } = req.body
-      const user = await getUserByEmail(email)
+      const findUser = await getUserByEmail(email)
+      const user = await getUserById(findUser.id)
       const token = generateToken(user)
       if (!user) {
         throw new Error(400, 'Invalid credentials')
