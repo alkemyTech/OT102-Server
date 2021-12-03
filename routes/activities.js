@@ -1,5 +1,10 @@
 const express = require('express')
-const { get, getActivity, destroy, post } = require('../controllers/activities')
+const {
+  get,
+  getActivity,
+  destroy,
+  post,
+} = require('../controllers/activities')
 
 const { validateRequest } = require('../middlewares')
 const isAdmin = require('../middlewares/isAdmin')
