@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors')
 const { verifyToken } = require('./jwt')
 
 const tokenId = (req) => {
@@ -21,7 +22,11 @@ const isLoggedUser = async (req, res, next) => {
     req.userId = tokenId(req)
     next()
   } catch (error) {
-    next(error)
+    const httpError = createHttpError(
+      error.statusCode,
+      error.message,
+    )
+    next(httpError)
   }
 }
 
