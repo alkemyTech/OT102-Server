@@ -56,13 +56,13 @@ module.exports = {
     try {
       const { email, password } = req.body
       const findUser = await getUserByEmail(email)
-      const user = await getUserById(findUser.id)
-      const token = generateToken(user)
-      if (!user) {
+      if (!findUser) {
         throw new Error(400, 'Invalid credentials')
       } else {
-        const decriptedPassword = bcryptjs.compareSync(password, user.password)
+        const decriptedPassword = bcryptjs.compareSync(password, findUser.password)
         if (decriptedPassword) {
+          const user = await getUserById(findUser.id)
+          const token = generateToken(user)
           endpointResponse({
             res,
             message: 'User logged succesfully',
