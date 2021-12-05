@@ -11,19 +11,19 @@ const {
 } = require('../services/categories')
 
 module.exports = {
-  get: async (req, res, next) => {
+  get: catchAsync(async (req, res, next) => {
     try {
-      const categories = await getAll()
-      const response = {
-        status: true,
-        message: 'Categories retrieved successfully',
-        data: categories,
-      }
-      res.status(200).json(response)
+      const allCategories = await getAll()
+      endpointResponse({
+        res,
+        message: 'Categories were retrieved successfully',
+        body: allCategories,
+      })
     } catch (error) {
-      next(error)
+      const httpError = createHttpError(500, `[Error retrieving categories] - [categories - get]: ${error.message}`)
+      next(httpError)
     }
-  },
+  }),
 
   destroy: catchAsync(async (req, res, next) => {
     try {
