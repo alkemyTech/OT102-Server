@@ -3,6 +3,7 @@ const {
   deleteTestimonial,
   getAllTestimonials,
   updateById,
+  addTestimonial,
 } = require('../services/testimonials')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/index')
@@ -51,6 +52,24 @@ module.exports = {
       endpointResponse({
         res,
         message: 'Testimonial deleted',
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message)
+      next(httpError)
+    }
+  }),
+
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const { name, image, content } = req.body
+      const newTestimonial = await addTestimonial({ name, image, content })
+
+      endpointResponse({
+        res,
+        code: 201,
+        status: true,
+        message: 'Testimonial successfully created.',
+        body: newTestimonial,
       })
     } catch (error) {
       const httpError = createHttpError(error.statusCode, error.message)

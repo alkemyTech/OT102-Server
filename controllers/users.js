@@ -2,7 +2,12 @@ const createHttpError = require('http-errors')
 const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
-const { getUsers, addUser, deleteUser } = require('../services/user')
+const {
+  getUsers,
+  addUser,
+  deleteUser,
+  getUserById,
+} = require('../services/user')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -17,7 +22,10 @@ module.exports = {
         body: users,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving users] - [users - get]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error retrieving users] - [users - get]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
@@ -38,7 +46,10 @@ module.exports = {
         status: 201,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error creating users] - [users - post]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error creating users] - [users - post]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
@@ -51,7 +62,27 @@ module.exports = {
         body: deletedUser,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error deleting User] - [users - delete]: ${error.message}`)
+      const httpError = createHttpError(
+        404,
+        `[Error deleting User] - [users - delete]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
+  getMyUser: catchAsync(async (req, res, next) => {
+    try {
+      const userData = await getUserById(req.userId)
+      endpointResponse({
+        res,
+        message: 'User retrieved successfully.',
+        body: userData,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving user] - [/auth/me - GET] ${error.message}`,
+      )
       next(httpError)
     }
   }),

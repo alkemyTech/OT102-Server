@@ -14,7 +14,8 @@ const isAdmin = (req, res, next) => {
       const httpError = createHttpError(401, 'Failed to authenticate token')
       next(httpError)
     }
-    if (decoded.role === 'Admin') {
+    // if (decoded.role === 'Admin') { // cant be 'role'.  it's the table name
+    if (decoded.userRole === 'Admin') {
       next()
     } else {
       const httpError = createHttpError(401, 'Forbidden access')
