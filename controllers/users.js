@@ -98,4 +98,21 @@ module.exports = {
       next(httpError)
     }
   }),
+
+  getMyUser: catchAsync(async (req, res, next) => {
+    try {
+      const userData = await getUserById(req.userId)
+      endpointResponse({
+        res,
+        message: 'User retrieved successfully.',
+        body: userData,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving user] - [/auth/me - GET] ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
 }

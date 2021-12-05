@@ -6,6 +6,7 @@ const {
   getById,
   deleteActivity,
   addActivity,
+  updateActivity,
 } = require('../services/activities')
 
 module.exports = {
@@ -62,6 +63,23 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(409, `[Error creating activity] - [activity - post]: ${error.message}`)
+      next(httpError)
+    }
+  }),
+  update: catchAsync(async (req, res, next) => {
+    try {
+      const { name, image } = req.body
+      const { id } = req.params
+      const updatedActivity = await updateActivity({ id, name, image })
+      endpointResponse({
+        res,
+        code: 200,
+        status: true,
+        message: 'activity updated successfully',
+        body: updatedActivity,
+      })
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, `[Error updating activity] - [activity - put]: ${error.message}`)
       next(httpError)
     }
   }),

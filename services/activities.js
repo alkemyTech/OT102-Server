@@ -1,3 +1,4 @@
+const { ErrorObject } = require('../helpers/error')
 const { Activity } = require('../models')
 
 exports.getActivities = async () => {
@@ -58,5 +59,27 @@ exports.addActivity = async (data) => {
     }
   } catch (err) {
     throw Error(err.message)
+  }
+}
+exports.updateActivity = async ({
+  id, name, image, content = null,
+}) => {
+  try {
+    const activity = await Activity.findByPk(id)
+
+    if (!activity) {
+      throw new Error('ID not found.')
+    }
+    activity.set({
+      id, name, image, content,
+    })
+    activity.save()
+
+    return activity
+  } catch (error) {
+    if (error.message === 'ID not found.') {
+      throw new ErrorObject('activity not found with that ID', 404)
+    }
+    throw new ErrorObject(error.message, 500)
   }
 }
