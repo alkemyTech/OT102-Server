@@ -3,11 +3,9 @@ const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getUsers,
-  addUser,
-  deleteUser,
-  getUserById,
+  getUsers, getUserByEmail, addUser, deleteUser, getUserById,
 } = require('../services/user')
+const { generateToken } = require('../middlewares/jwt')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -53,6 +51,37 @@ module.exports = {
       next(httpError)
     }
   }),
+
+  login: catchAsync(async (req, res, next) => {
+    try {
+      const { email, password } = req.body
+      const findUser = await getUserByEmail(email)
+      if (!findUser) {
+        throw new Error(400, 'Invalid credentials')
+      } else {
+        const decriptedPassword = bcryptjs.compareSync(password, findUser.password)
+        if (decriptedPassword) {
+          const user = await getUserById(findUser.id)
+          const token = generateToken(user)
+          endpointResponse({
+            res,
+            message: 'User logged succesfully',
+            body: { token, user },
+            status: 200,
+          })
+        } else {
+          throw new Error(400, 'Invalid credentials')
+        }
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.status,
+        `[Error logging users] - [users - post]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   destroy: catchAsync(async (req, res, next) => {
     try {
       const deletedUser = await deleteUser(req.params.id)

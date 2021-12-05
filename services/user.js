@@ -14,11 +14,37 @@ exports.getUserByEmail = async (email) => {
   try {
     const user = await User.findOne({
       where: { email },
-      attributes: { include: ['email'] },
     })
     return user
   } catch (err) {
     throw Error(err.message)
+  }
+}
+
+exports.getUserById = async (id) => {
+  try {
+    const attributes = [
+      ['id', 'userId'], // alias  id AS userId
+      'firstName',
+      'lastName',
+      'email',
+      'password',
+      'image',
+      [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
+    ]
+    const user = await User.findByPk(id, {
+      attributes,
+      include: {
+        // includes other table
+        model: Role, // model name
+        as: 'role', // model alias
+        attributes: [], // we don't want any atributes
+      },
+    })
+    if (!user) throw new ErrorObject('User not Found', 404)
+    return user
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
@@ -40,31 +66,5 @@ exports.deleteUser = async (id) => {
     return deleteUser
   } catch (err) {
     throw Error(err.message)
-  }
-}
-
-exports.getUserById = async (id) => {
-  try {
-    const attributes = [
-      ['id', 'userId'], // alias  id AS userId
-      'firstName',
-      'lastName',
-      'email',
-      'image',
-      [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
-    ]
-    const user = await User.findByPk(id, {
-      attributes,
-      include: {
-        // includes other table
-        model: Role, // model name
-        as: 'role', // model alias
-        attributes: [], // we don't want any atributes
-      },
-    })
-    if (!user) throw new ErrorObject('User not Found', 404)
-    return user
-  } catch (error) {
-    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
