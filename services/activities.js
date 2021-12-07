@@ -1,85 +1,67 @@
 const { ErrorObject } = require('../helpers/error')
 const { Activity } = require('../models')
 
-exports.getActivities = async () => {
+exports.getAllActivities = async () => {
   try {
-    const activities = await Activity.findAll({
-      attributes: {
-        exclude: ['updatedAt', 'deletedAt'],
-      },
-    })
-    return activities
-  } catch (err) {
-    throw Error(err.message)
+    return await Activity.findAll()
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
 exports.getById = async (id) => {
   try {
-    const activityById = await Activity.findOne({
-      where: { id },
-    })
-
+    const activityById = await Activity.findByPk(id)
     if (!activityById) {
-      throw Error('Not found')
+      throw new ErrorObject(`No activity found with ID: ${id}`, 404)
     }
-
     return activityById
   } catch (error) {
-    if (error.message === 'Not found') {
-      throw Error('No activity found with that ID', 404)
-    }
-    throw Error('Error while retrieving activity by ID')
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
 exports.deleteActivity = async (id) => {
   try {
-    const activity = await Activity.findOne({
-      where: { id },
-    })
+    const activity = await Activity.findByPk(id)
     if (!activity) {
-      throw Error(`ID ${id} not exist.`)
-    } else {
-      const deleteActivity = await Activity.destroy({ where: { id } })
-      return deleteActivity
+      throw new ErrorObject(`No activity found with ID: ${id}`, 404)
     }
-  } catch (err) {
-    throw Error(err.message)
+    activity.destroy()
+    return activity
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
 exports.addActivity = async (data) => {
   try {
-    const {
-      id, name, image, content,
-    } = await Activity.create(data)
-    return {
-      id, name, image, content,
+    return await Activity.create(data)
+  } catch (error) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new ErrorObject('The activity already exist', 409) // 409 conflict
     }
-  } catch (err) {
-    throw Error(err.message)
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
+
 exports.updateActivity = async ({
-  id, name, image, content = null,
+  id,
+  name,
+  image,
+  content = null,
 }) => {
   try {
     const activity = await Activity.findByPk(id)
-
     if (!activity) {
-      throw new Error('ID not found.')
+      throw new ErrorObject(`No activity found with ID: ${id}`, 404)
     }
     activity.set({
       id, name, image, content,
     })
     activity.save()
-
     return activity
   } catch (error) {
-    if (error.message === 'ID not found.') {
-      throw new ErrorObject('activity not found with that ID', 404)
-    }
-    throw new ErrorObject(error.message, 500)
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }

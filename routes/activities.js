@@ -1,6 +1,10 @@
 const express = require('express')
 const {
-  get, getActivity, destroy, post, update,
+  get,
+  getActivity,
+  destroy,
+  post,
+  update,
 } = require('../controllers/activities')
 
 const { validateRequest } = require('../middlewares')

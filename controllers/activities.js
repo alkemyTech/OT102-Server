@@ -2,7 +2,7 @@ const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getActivities,
+  getAllActivities,
   getById,
   deleteActivity,
   addActivity,
@@ -12,17 +12,21 @@ const {
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
-      const allActivities = await getActivities()
+      const allActivities = await getAllActivities()
       endpointResponse({
         res,
         message: 'Activities were retrieved successfully.',
         body: allActivities,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving activities] - [activities - get]: ${error.message}`)
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving activities] - [activities - GET]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
   getActivity: catchAsync(async (req, res, next) => {
     try {
       const activity = await getById(req.params.id)
@@ -32,40 +36,52 @@ module.exports = {
         body: activity,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving activity by ID] - [activity - get]: ${error.message}`)
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving activity] - [activities - GET]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
   destroy: catchAsync(async (req, res, next) => {
     try {
-      const activityId = req.params.id
-      const deletedActivity = await deleteActivity(activityId)
+      const { id } = req.params
+      const deletedActivity = await deleteActivity(id)
       endpointResponse({
         res,
         message: 'Activity were deleted successfully.',
         body: deletedActivity,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error deleting activity] - [activity - delete]: ${error.message}`)
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error deleting activity] - [activities - DELETE]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
   post: catchAsync(async (req, res, next) => {
     try {
       const { name, image, content } = req.body
-      const newsActivity = await addActivity({ name, image, content })
+      const activity = await addActivity({ name, image, content })
       endpointResponse({
         res,
         code: 201,
         status: true,
         message: 'Activity created successfully.',
-        body: newsActivity,
+        body: activity,
       })
     } catch (error) {
-      const httpError = createHttpError(409, `[Error creating activity] - [activity - post]: ${error.message}`)
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error creating activity] - [activities - POST]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
   update: catchAsync(async (req, res, next) => {
     try {
       const { name, image } = req.body
