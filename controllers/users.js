@@ -2,7 +2,10 @@ const createHttpError = require('http-errors')
 const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
-const { getUsers, addUser, deleteUser } = require('../services/user')
+const {
+  getUsers, getUserByEmail, addUser, deleteUser, getUserById,
+} = require('../services/user')
+const { generateToken } = require('../middlewares/jwt')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -17,7 +20,10 @@ module.exports = {
         body: users,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error retrieving users] - [users - get]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error retrieving users] - [users - get]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
@@ -38,10 +44,44 @@ module.exports = {
         status: 201,
       })
     } catch (error) {
-      const httpError = createHttpError(500, `[Error creating users] - [users - post]: ${error.message}`)
+      const httpError = createHttpError(
+        500,
+        `[Error creating users] - [users - post]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
+
+  login: catchAsync(async (req, res, next) => {
+    try {
+      const { email, password } = req.body
+      const findUser = await getUserByEmail(email)
+      if (!findUser) {
+        throw new Error(400, 'Invalid credentials')
+      } else {
+        const decriptedPassword = bcryptjs.compareSync(password, findUser.password)
+        if (decriptedPassword) {
+          const user = await getUserById(findUser.id)
+          const token = generateToken(user)
+          endpointResponse({
+            res,
+            message: 'User logged succesfully',
+            body: { token, user },
+            status: 200,
+          })
+        } else {
+          throw new Error(400, 'Invalid credentials')
+        }
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.status,
+        `[Error logging users] - [users - post]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   destroy: catchAsync(async (req, res, next) => {
     try {
       const deletedUser = await deleteUser(req.params.id)
@@ -51,7 +91,27 @@ module.exports = {
         body: deletedUser,
       })
     } catch (error) {
-      const httpError = createHttpError(404, `[Error deleting User] - [users - delete]: ${error.message}`)
+      const httpError = createHttpError(
+        404,
+        `[Error deleting User] - [users - delete]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
+  getMyUser: catchAsync(async (req, res, next) => {
+    try {
+      const userData = await getUserById(req.userId)
+      endpointResponse({
+        res,
+        message: 'User retrieved successfully.',
+        body: userData,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving user] - [/auth/me - GET] ${error.message}`,
+      )
       next(httpError)
     }
   }),

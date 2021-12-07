@@ -11,7 +11,7 @@ const { categorySchema } = require('../schemas/categories')
 const router = new express.Router()
 
 // Get Categories listing:
-router.get('/', get)
+router.get('/', isAdmin, get)
 // Delete Category by ID. Route only accessible for admins:
 router.delete('/:id', isAdmin, destroy)
 // Update Category by ID:

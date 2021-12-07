@@ -44,3 +44,24 @@ exports.addActivity = async (data) => {
     throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
+
+exports.updateActivity = async ({
+  id,
+  name,
+  image,
+  content = null,
+}) => {
+  try {
+    const activity = await Activity.findByPk(id)
+    if (!activity) {
+      throw new ErrorObject(`No activity found with ID: ${id}`, 404)
+    }
+    activity.set({
+      id, name, image, content,
+    })
+    activity.save()
+    return activity
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}
