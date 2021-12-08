@@ -87,7 +87,7 @@ module.exports = {
         name,
         content,
         image,
-        categoryId,
+        categoryId, // TODO must check if is valid category id
       } = req.body
       const entry = await addEntry({
         name,

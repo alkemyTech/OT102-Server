@@ -2,10 +2,10 @@ const createHttpError = require('http-errors')
 const { ErrorObject } = require('../helpers/error')
 const { Entry } = require('../models')
 
-exports.getEntries = async () => {
+exports.getEntries = async (type) => {
   try {
     const entries = await Entry.findAll({
-      where: { type: 'News' },
+      where: { type },
       attributes: {
         exclude: ['updatedAt', 'deletedAt'],
       },
@@ -18,9 +18,7 @@ exports.getEntries = async () => {
 
 exports.getById = async (id) => {
   try {
-    const entryById = await Entry.findOne({
-      where: { id },
-    })
+    const entryById = await Entry.findByPk(id)
     if (!entryById) {
       throw new ErrorObject(`No entry found with ID: ${id}`, 404)
     }
