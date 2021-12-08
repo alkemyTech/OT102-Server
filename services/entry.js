@@ -1,4 +1,5 @@
 const createHttpError = require('http-errors')
+const { ErrorObject } = require('../helpers/error')
 const { Entry } = require('../models')
 
 exports.getEntries = async () => {
@@ -10,12 +11,8 @@ exports.getEntries = async () => {
       },
     })
     return entries
-  } catch (err) {
-    const httpError = createHttpError(
-      500,
-      `Error while getting entries: ${err.message}`,
-    )
-    throw httpError
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
@@ -24,30 +21,25 @@ exports.getById = async (id) => {
     const entryById = await Entry.findOne({
       where: { id },
     })
-
+    if (!entryById) {
+      throw new ErrorObject(`No entry found with ID: ${id}`, 404)
+    }
     return entryById
   } catch (error) {
-    const httpError = createHttpError(
-      400,
-      `Error while getting entry: ${error.message}`,
-    )
-    throw httpError
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
 exports.deleteEntry = async (id) => {
   try {
-    const deleteEntry = await Entry.destroy({ where: { id } })
+    const deleteEntry = await Entry.findByPk(id)
     if (!deleteEntry) {
-      throw new Error('Entry not found.')
+      throw new ErrorObject(`No entry found with ID: ${id}`, 404)
     }
+    deleteEntry.destroy()
     return deleteEntry
-  } catch (err) {
-    const httpError = createHttpError(
-      400,
-      `Error while deleting entry: ${err.message}`,
-    )
-    throw httpError
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
@@ -62,11 +54,15 @@ exports.updateById = async (id, entry) => {
     await updateEntry.save()
 
     return updateEntry
-  } catch (err) {
-    const httpError = createHttpError(
-      err.statusCode || 500,
-      `Error while updating entry: ${err.message}`,
-    )
-    throw httpError
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}
+
+exports.addEntry = async (data) => {
+  try {
+    return await Entry.create(data)
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
