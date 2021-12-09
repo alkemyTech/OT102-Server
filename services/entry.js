@@ -2,10 +2,10 @@ const createHttpError = require('http-errors')
 const { ErrorObject } = require('../helpers/error')
 const { Entry } = require('../models')
 
-exports.getEntries = async (type) => {
+exports.getEntries = async () => {
   try {
     const entries = await Entry.findAll({
-      where: { type },
+      where: { type: 'news' },
       attributes: {
         exclude: ['updatedAt', 'deletedAt'],
       },
