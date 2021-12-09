@@ -16,6 +16,9 @@ module.exports = {
           phone: organization.phone,
           address: organization.adress,
           welcomeText: organization.welcomeText,
+          facebook: organization.facebook,
+          linkedin: organization.linkedin,
+          instagram: organization.instagram,
         },
       })
     } catch (error) {
