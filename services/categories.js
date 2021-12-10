@@ -14,6 +14,18 @@ exports.getAll = async () => {
   }
 }
 
+exports.getById = async (id) => {
+  try {
+    const categoryById = await Category.findByPk(id)
+    if (!categoryById) {
+      throw new ErrorObject(`No activity found with ID: ${id}`, 404)
+    }
+    return categoryById
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}
+
 exports.updateCategory = async (data) => {
   const { id, name, description } = data
   try {

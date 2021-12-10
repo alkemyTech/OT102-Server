@@ -5,6 +5,7 @@ const { ErrorObject } = require('../helpers/error')
 const { endpointResponse } = require('../helpers/success')
 const {
   getAll,
+  getById,
   deleteCategory,
   updateCategory,
   addCategory,
@@ -21,6 +22,22 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(500, `[Error retrieving categories] - [categories - get]: ${error.message}`)
+      next(httpError)
+    }
+  }),
+  getCategory: catchAsync(async (req, res, next) => {
+    try {
+      const category = await getById(req.params.id)
+      endpointResponse({
+        res,
+        message: 'Category retrieved successfully.',
+        body: category,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving category] - [category - GET]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
