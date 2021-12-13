@@ -2,7 +2,7 @@
 const sgMail = require('@sendgrid/mail')
 const createHttpError = require('http-errors')
 const config = require('../config/config').development
-const template = require('../views/template1')
+const { template } = require('../views/template1')
 
 exports.sendMail = async (to = '', subject = '', message = '') => {
   sgMail.setApiKey(config.sendGridKey)

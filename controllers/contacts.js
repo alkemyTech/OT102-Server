@@ -2,6 +2,7 @@ const createHttpError = require('http-errors')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const { getContacts, addContact } = require('../services/contacts')
+const { sendMail } = require('../helpers/mailSender')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -36,6 +37,13 @@ module.exports = {
         message: 'Contact was added successfully.',
         body: contact,
       })
+      if (contact) {
+        sendMail(
+          email,
+          'Recibimos tu mensaje!',
+          `Gracias por tu mensaje ${name}. A la brevedad estaremos en contacto!`,
+        )
+      }
     } catch (error) {
       const httpError = createHttpError(
         error.status,
