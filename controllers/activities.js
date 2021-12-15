@@ -86,7 +86,9 @@ module.exports = {
     try {
       const { name, image, content } = req.body
       const { id } = req.params
-      const updatedActivity = await updateActivity({ id, name, image, content })
+      const updatedActivity = await updateActivity({
+        id, name, image, content,
+      })
       endpointResponse({
         res,
         code: 200,
@@ -95,7 +97,10 @@ module.exports = {
         body: updatedActivity,
       })
     } catch (error) {
-      const httpError = createHttpError(error.statusCode, `[Error updating activity] - [activity - put]: ${error.message}`)
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error updating activity] - [activity - put]: ${error.message}`,
+      )
       next(httpError)
     }
   }),
