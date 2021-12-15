@@ -38,7 +38,7 @@ exports.getUserById = async (id) => {
         // includes other table
         model: Role, // model name
         as: 'role', // model alias
-        attributes: [], // we don't want any atributes
+        attributes: [], // we don't want any atributes from Role
       },
     })
     if (!user) throw new ErrorObject('User not Found', 404)
@@ -48,10 +48,25 @@ exports.getUserById = async (id) => {
   }
 }
 
-exports.addUser = async (data) => {
+exports.addUser = async (userData) => {
   try {
-    const createdUser = await User.create(data)
-    return createdUser
+    const {
+      id,
+      firstName,
+      lastName,
+      email,
+      image,
+      createdAt,
+    } = await User.create(userData)
+    return {
+      userId:
+      id,
+      firstName,
+      lastName,
+      email,
+      image,
+      createdAt,
+    }
   } catch (err) {
     throw Error(err.message)
   }

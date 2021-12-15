@@ -3,9 +3,14 @@ const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getUsers, getUserByEmail, addUser, deleteUser, getUserById,
+  getUsers,
+  getUserByEmail,
+  addUser,
+  deleteUser,
+  getUserById,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
+const { getRoleByName } = require('../services/roles')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -35,12 +40,16 @@ module.exports = {
         ...req.body,
         password: encryptedPassword,
       }
+      const { id: roleId } = await getRoleByName('Standard')
+      userFormData.roleId = roleId
       const newUser = await addUser(userFormData)
+      newUser.userRole = 'Standard'
+      const token = generateToken(newUser)
 
       endpointResponse({
         res,
         message: 'User were created successfully.',
-        body: newUser,
+        body: { token, user: newUser },
         status: 201,
       })
     } catch (error) {
@@ -59,7 +68,10 @@ module.exports = {
       if (!findUser) {
         throw new Error(400, 'Invalid credentials')
       } else {
-        const decriptedPassword = bcryptjs.compareSync(password, findUser.password)
+        const decriptedPassword = bcryptjs.compareSync(
+          password,
+          findUser.password,
+        )
         if (decriptedPassword) {
           const user = await getUserById(findUser.id)
           const token = generateToken(user)
