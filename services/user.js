@@ -3,7 +3,24 @@ const { Role, User, sequelize } = require('../models')
 
 exports.getUsers = async () => {
   try {
-    const users = await User.findAll()
+    const attributes = [
+      ['id', 'userId'], // alias  id AS userId
+      'firstName',
+      'lastName',
+      'email',
+      // 'password',
+      'image',
+      [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
+    ]
+    const users = await User.findAll({
+      attributes,
+      include: {
+        // includes other table
+        model: Role, // model name
+        as: 'role', // model alias
+        attributes: [], // we don't want any atributes
+      },
+    })
     return users
   } catch (err) {
     throw Error(err.message)
@@ -28,7 +45,7 @@ exports.getUserById = async (id) => {
       'firstName',
       'lastName',
       'email',
-      'password',
+      // 'password',
       'image',
       [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
     ]
