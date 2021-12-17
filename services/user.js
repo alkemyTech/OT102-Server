@@ -3,7 +3,24 @@ const { Role, User, sequelize } = require('../models')
 
 exports.getUsers = async () => {
   try {
-    const users = await User.findAll()
+    const attributes = [
+      ['id', 'userId'], // alias  id AS userId
+      'firstName',
+      'lastName',
+      'email',
+      // 'password',
+      'image',
+      [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
+    ]
+    const users = await User.findAll({
+      attributes,
+      include: {
+        // includes other table
+        model: Role, // model name
+        as: 'role', // model alias
+        attributes: [], // we don't want any atributes
+      },
+    })
     return users
   } catch (err) {
     throw createHttpError(err.statusCode || 500, err.message)
@@ -28,7 +45,7 @@ exports.getUserById = async (id) => {
       'firstName',
       'lastName',
       'email',
-      'password',
+      // 'password',
       'image',
       [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
     ]
@@ -38,7 +55,7 @@ exports.getUserById = async (id) => {
         // includes other table
         model: Role, // model name
         as: 'role', // model alias
-        attributes: [], // we don't want any atributes
+        attributes: [], // we don't want any atributes from Role
       },
     })
     if (!user) throw createHttpError(404, 'User not found.')
@@ -48,10 +65,25 @@ exports.getUserById = async (id) => {
   }
 }
 
-exports.addUser = async (data) => {
+exports.addUser = async (userData) => {
   try {
-    const createdUser = await User.create(data)
-    return createdUser
+    const {
+      id,
+      firstName,
+      lastName,
+      email,
+      image,
+      createdAt,
+    } = await User.create(userData)
+    return {
+      userId:
+      id,
+      firstName,
+      lastName,
+      email,
+      image,
+      createdAt,
+    }
   } catch (err) {
     throw createHttpError(err.statusCode || 500, err.message)
   }

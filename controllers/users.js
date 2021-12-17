@@ -11,14 +11,12 @@ const {
   updateUser,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
+const { getRoleByName } = require('../services/roles')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
       const users = await getUsers()
-      // if (true) {
-      //   return next(new ErrorObject('No users were found with that ID', 404))
-      // }
       endpointResponse({
         res,
         message: 'Users were retrieved successfully.',
@@ -40,12 +38,16 @@ module.exports = {
         ...req.body,
         password: encryptedPassword,
       }
+      const { id: roleId } = await getRoleByName('Standard')
+      userFormData.roleId = roleId
       const newUser = await addUser(userFormData)
+      newUser.userRole = 'Standard'
+      const token = generateToken(newUser)
 
       endpointResponse({
         res,
         message: 'User were created successfully.',
-        body: newUser,
+        body: { token, user: newUser },
         status: 201,
       })
     } catch (error) {
