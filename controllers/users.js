@@ -3,7 +3,12 @@ const bcryptjs = require('bcrypt')
 const { catchAsync } = require('../helpers')
 const { endpointResponse } = require('../helpers/success')
 const {
-  getUsers, getUserByEmail, addUser, deleteUser, getUserById,
+  getUsers,
+  getUserByEmail,
+  addUser,
+  deleteUser,
+  getUserById,
+  updateUser,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
 
@@ -21,7 +26,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.statusCode || 500,
         `[Error retrieving users] - [users - get]: ${error.message}`,
       )
       next(httpError)
@@ -45,7 +50,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.statusCode || 500,
         `[Error creating users] - [users - post]: ${error.message}`,
       )
       next(httpError)
@@ -75,7 +80,7 @@ module.exports = {
       }
     } catch (error) {
       const httpError = createHttpError(
-        error.status,
+        error.statusCode || 500,
         `[Error logging users] - [users - post]: ${error.message}`,
       )
       next(httpError)
@@ -92,7 +97,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        404,
+        error.statusCode || 500,
         `[Error deleting User] - [users - delete]: ${error.message}`,
       )
       next(httpError)
@@ -109,8 +114,25 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        error.statusCode,
+        error.statusCode || 500,
         `[Error retrieving user] - [/auth/me - GET] ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
+  updateUser: catchAsync(async (req, res, next) => {
+    try {
+      const updatedUser = await updateUser(req.userId, req.body)
+      endpointResponse({
+        res,
+        message: 'User were updated successfully.',
+        body: updatedUser,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error updating User] - [users - update]: ${error.message}`,
       )
       next(httpError)
     }

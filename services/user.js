@@ -1,4 +1,4 @@
-const { ErrorObject } = require('../helpers/error')
+const createHttpError = require('http-errors')
 const { Role, User, sequelize } = require('../models')
 
 exports.getUsers = async () => {
@@ -6,7 +6,7 @@ exports.getUsers = async () => {
     const users = await User.findAll()
     return users
   } catch (err) {
-    throw Error(err.message)
+    throw createHttpError(err.statusCode || 500, err.message)
   }
 }
 
@@ -17,7 +17,7 @@ exports.getUserByEmail = async (email) => {
     })
     return user
   } catch (err) {
-    throw Error(err.message)
+    throw createHttpError(err.statusCode || 500, err.message)
   }
 }
 
@@ -41,10 +41,10 @@ exports.getUserById = async (id) => {
         attributes: [], // we don't want any atributes
       },
     })
-    if (!user) throw new ErrorObject('User not Found', 404)
+    if (!user) throw createHttpError(404, 'User not found.')
     return user
-  } catch (error) {
-    throw new ErrorObject(error.message, error.statusCode || 500)
+  } catch (err) {
+    throw createHttpError(err.statusCode || 500, err.message)
   }
 }
 
@@ -53,7 +53,7 @@ exports.addUser = async (data) => {
     const createdUser = await User.create(data)
     return createdUser
   } catch (err) {
-    throw Error(err.message)
+    throw createHttpError(err.statusCode || 500, err.message)
   }
 }
 
@@ -61,10 +61,22 @@ exports.deleteUser = async (id) => {
   try {
     const deleteUser = await User.destroy({ where: { id } })
     if (!deleteUser) {
-      throw new Error('User not found.')
+      throw createHttpError(404, 'User not found.')
     }
     return deleteUser
   } catch (err) {
-    throw Error(err.message)
+    throw createHttpError(err.statusCode || 500, err.message)
+  }
+}
+
+exports.updateUser = async (id, data) => {
+  try {
+    const updateUser = await User.update(data, { where: { id } })
+    if (!updateUser) {
+      throw createHttpError(404, 'User not found.')
+    }
+    return updateUser
+  } catch (err) {
+    throw createHttpError(err.statusCode || 500, err.message)
   }
 }

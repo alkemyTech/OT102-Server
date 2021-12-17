@@ -6,5 +6,5 @@ const router = new express.Router()
 /* GET users listing. */
 router.get('/', get)
 router.delete('/:id', destroy)
-
+router.put('/:id', destroy)
 module.exports = router
