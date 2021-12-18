@@ -1,7 +1,7 @@
 version: '3.8'
 
 services: 
-  mysqldb-102:
+  mysqldb:
     image: mysql
     restart: always
     env_file: ./.env-db
