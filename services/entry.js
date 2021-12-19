@@ -41,14 +41,19 @@ exports.deleteEntry = async (id) => {
   }
 }
 
-exports.updateById = async (id, entry) => {
+exports.updateById = async (data) => {
+  const {
+    id, name, image, content, categoryId, type,
+  } = data
   try {
     const updateEntry = await Entry.findByPk(id)
     if (!updateEntry) {
       const httpError = createHttpError(404, 'News not found.')
       throw httpError
     }
-    updateEntry.set(entry)
+    updateEntry.set({
+      id, name, image, content, categoryId, type,
+    })
     await updateEntry.save()
 
     return updateEntry
