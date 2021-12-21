@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo chmod -R 777 /home/ubuntu/g90-api-2
+sudo chmod -R 777 /home/ubuntu/g102-api-2
 cd /home/ubuntu/g102-api-2
 # add npm and node to path
 export NVM_DIR="$HOME/.nvm"
