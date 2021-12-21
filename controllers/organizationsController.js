@@ -14,7 +14,7 @@ module.exports = {
           name: organization.name,
           image: organization.image,
           phone: organization.phone,
-          address: organization.adress,
+          address: organization.address,
           welcomeText: organization.welcomeText,
           facebook: organization.facebook,
           linkedin: organization.linkedin,
@@ -22,7 +22,12 @@ module.exports = {
         },
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving organization] - [organization - get]: ${error.message}`, 404))
+      next(
+        new ErrorObject(
+          `[Error retrieving organization] - [organization - get]: ${error.message}`,
+          404,
+        ),
+      )
     }
   }),
 }
