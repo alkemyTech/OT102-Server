@@ -8,6 +8,7 @@ const {
   addUser,
   deleteUser,
   getUserById,
+  updateUser,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
 const { getRoleByName } = require('../services/roles')
@@ -23,7 +24,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.statusCode || 500,
         `[Error retrieving users] - [users - get]: ${error.message}`,
       )
       next(httpError)
@@ -51,7 +52,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.statusCode || 500,
         `[Error creating users] - [users - post]: ${error.message}`,
       )
       next(httpError)
@@ -65,10 +66,7 @@ module.exports = {
       if (!findUser) {
         throw new Error(400, 'Invalid credentials')
       } else {
-        const decriptedPassword = bcryptjs.compareSync(
-          password,
-          findUser.password,
-        )
+        const decriptedPassword = bcryptjs.compareSync(password, findUser.password)
         if (decriptedPassword) {
           const user = await getUserById(findUser.id)
           const token = generateToken(user)
@@ -84,7 +82,7 @@ module.exports = {
       }
     } catch (error) {
       const httpError = createHttpError(
-        error.status,
+        error.statusCode || 500,
         `[Error logging users] - [users - post]: ${error.message}`,
       )
       next(httpError)
@@ -101,7 +99,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        404,
+        error.statusCode || 500,
         `[Error deleting User] - [users - delete]: ${error.message}`,
       )
       next(httpError)
@@ -118,8 +116,25 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        error.statusCode,
+        error.statusCode || 500,
         `[Error retrieving user] - [/auth/me - GET] ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
+  updateUser: catchAsync(async (req, res, next) => {
+    try {
+      const updatedUser = await updateUser(req.userId, req.body)
+      endpointResponse({
+        res,
+        message: 'User were updated successfully.',
+        body: updatedUser,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error updating User] - [users - update]: ${error.message}`,
       )
       next(httpError)
     }
