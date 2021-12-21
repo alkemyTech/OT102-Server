@@ -4,7 +4,7 @@
 nvm use 14
 
 # create our working directory if it does not exist
-DIR="/home/ubuntu/g102-api-2"
+DIR="/home/ubuntu/g102-api"
 if [ -d "$DIR" ]; then
   echo "${DIR} exists."
 else

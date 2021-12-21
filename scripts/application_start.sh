@@ -1,6 +1,6 @@
 #!/bin/bash
-sudo chmod -R 777 /home/ubuntu/g102-api-2
-cd /home/ubuntu/g102-api-2
+sudo chmod -R 777 /home/ubuntu/g102-api
+cd /home/ubuntu/g102-api
 # add npm and node to path
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
