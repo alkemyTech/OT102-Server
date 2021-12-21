@@ -7,7 +7,7 @@ module.exports = {
       lastName: 'Demo',
       email: 'test@test.com',
       // Important: Password not encrypted yet! 
-      password: '1234',
+      password: '$10$c53YdO0OApZwaiafK5HVOuxtkH9L8o1aekwdKxaWyOTGhF9PzbGx2',
       roleId: 1,
       image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       createdAt: new Date,
