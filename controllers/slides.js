@@ -35,7 +35,7 @@ module.exports = {
       const response = {
         status: true,
         message: 'Slide retrieved successfully',
-        data: slide,
+        body: slide,
       }
       res.status(200).json(response)
     } catch (error) {
