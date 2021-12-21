@@ -4,6 +4,7 @@ const {
   getAllTestimonials,
   updateById,
   addTestimonial,
+  getById,
 } = require('../services/testimonials')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/index')
@@ -26,11 +27,29 @@ module.exports = {
     }
   }),
 
+  getTestimonial: catchAsync(async (req, res, next) => {
+    try {
+      const testimonial = await getById(req.params.id)
+      endpointResponse({
+        res,
+        message: 'Testimonial retrieved successfully.',
+        body: testimonial,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving testimonial] - [testimonial - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   updateTestimonial: catchAsync(async (req, res, next) => {
     try {
       const updatedTestimonial = await updateById(
         req.params.id,
         req.body.name,
+        req.body.image,
         req.body.content,
       )
 

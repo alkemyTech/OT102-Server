@@ -1,6 +1,6 @@
 const express = require('express')
 const {
-  destroy, get, updateTestimonial, post,
+  destroy, get, getTestimonial, updateTestimonial, post,
 } = require('../controllers/testimonials')
 const isAdmin = require('../middlewares/isAdmin')
 const { validateRequest } = require('../middlewares')
@@ -10,6 +10,8 @@ const router = new express.Router()
 
 // Get testimonials listing:
 router.get('/', get)
+// Get testimonial by id:
+router.get('/:id', getTestimonial)
 // Update Testimonial, route only accesible for admins:
 router.put('/:id', isAdmin, updateTestimonial)
 // DELETE Testimonial, route only accesible for admins:
