@@ -26,8 +26,8 @@ if (secure) {
   * Create HTTPS server.
   */
    var options = {
-    key: fs.readFileSync('./certs/server-key.pem'),
-    cert: fs.readFileSync('./certs/server-cert.pem'),
+    key: fs.readFileSync('./certs/server.key'),
+    cert: fs.readFileSync('./certs/server.cert'),
   };
   
   server = https.createServer({
