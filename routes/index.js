@@ -1,25 +1,29 @@
-const express = require('express');
+const express = require('express')
 
-const router = new express.Router();
+const activitiesRouter = require('./activities')
+const authRouter = require('./auth')
+const categoriesRouter = require('./categories')
+const contactsRouter = require('./contacts')
+const entriesRouter = require('./entries')
+const membersRouter = require('./members')
+const organizationsRouter = require('./organizations')
+const pingRouter = require('./ping')
+const slidesRouter = require('./slides')
+const testimonialsRouter = require('./testimonials')
+const usersRouter = require('./user')
 
-/* GET test PING route. */
-router.get('/ping', async (req, res) => {
-  try {
-    const pongResponse = {
-      status: true,
-      body: {
-        message: 'PONG',
-      },
-    };
-    res.status(200).send(pongResponse);
-  } catch (Error) {
-    res.status(500).send({ Error: 'Something went wrong.' });
-  }
-});
+const router = new express.Router()
 
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.use('/activities', activitiesRouter)
+router.use('/auth', authRouter)
+router.use('/categories', categoriesRouter)
+router.use('/contacts', contactsRouter)
+router.use('/members', membersRouter)
+router.use('/news', entriesRouter)
+router.use('/organizations', organizationsRouter)
+router.use('/ping', pingRouter)
+router.use('/slides', slidesRouter)
+router.use('/testimonials', testimonialsRouter)
+router.use('/users', usersRouter)
 
-module.exports = router;
+module.exports = router

@@ -1,13 +1,13 @@
 version: '3.8'
 
 services: 
-  mysqldb-102:
+  mysqldb:
     image: mysql
     restart: always
-    env_file: ./.env
+    env_file: ./.env-db
     environment:
       MYSQL_ROOT_PASSWORD: $DB_PASSWORD
-      MYSQL_DATABASE: $DB_NAME
+      # MYSQL_DATABASE: $DB_NAME
     ports:
       - $DB_LOCAL_PORT:$DB_PORT
     volumes: 
