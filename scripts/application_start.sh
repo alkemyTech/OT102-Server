@@ -10,4 +10,4 @@ export NVM_DIR="$HOME/.nvm"
 base64 --decode env_encrypted.txt > .env
 # install node modules
 npm install
-npm run prod
+npm run prod:secure
