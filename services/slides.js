@@ -20,22 +20,22 @@ exports.getSlideById = async (id) => {
     if (slide === null) {
       throw new ErrorObject('Slide not found', 404)
     }
-    return Slide
+    return slide
   } catch (error) {
     throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
 
-exports.updateSlide = async (data) => {
-  const { id, name, description } = data
+exports.updateSlide = async (id, data) => {
+  const { imageUrl, text, order } = data
   try {
     const slide = await Slide.findByPk(id)
     if (slide === null) {
       throw new ErrorObject('Slide not found', 404)
     }
-    Slide.set({ id, name, description })
-    Slide.save()
-    return Slide
+    slide.set({ imageUrl, text, order })
+    slide.save()
+    return slide
   } catch (error) {
     throw new ErrorObject(error.message, error.statusCode || 500)
   }
