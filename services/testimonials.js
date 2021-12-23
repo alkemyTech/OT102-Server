@@ -9,7 +9,19 @@ exports.getAllTestimonials = async () => {
   }
 }
 
-exports.updateById = async (id, name, content) => {
+exports.getById = async (id) => {
+  try {
+    const testimonialById = await Testimonial.findByPk(id)
+    if (!testimonialById) {
+      throw new ErrorObject(`No testimonial found with ID: ${id}`, 404)
+    }
+    return testimonialById
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}
+
+exports.updateById = async (id, name, image, content) => {
   try {
     const testimonial = await Testimonial.findByPk(id)
 
@@ -17,7 +29,9 @@ exports.updateById = async (id, name, content) => {
       throw Error('Not found')
     }
 
-    testimonial.set({ id, name, content })
+    testimonial.set({
+      id, name, image, content,
+    })
     testimonial.save()
 
     return testimonial

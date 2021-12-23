@@ -64,11 +64,23 @@ module.exports = {
 
   updatedEntry: catchAsync(async (req, res, next) => {
     try {
-      const entryId = req.params.id
-      const newEntry = req.body.entry
-      const updatedEntry = await updateById(entryId, newEntry)
+      const { id } = req.params
+
+      const {
+        name, image, content, type, categoryId,
+      } = req.body
+
+      const updatedEntry = await updateById({
+        id,
+        name,
+        image,
+        content,
+        type,
+        categoryId,
+      })
       endpointResponse({
         res,
+        code: 200,
         message: 'Entry updated successfully.',
         body: updatedEntry,
       })
