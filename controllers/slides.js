@@ -31,7 +31,7 @@ module.exports = {
 
   getById: async (req, res, next) => {
     try {
-      const slide = await getSlideById(req.param.id)
+      const slide = await getSlideById(req.params.id)
       const response = {
         status: true,
         message: 'Slide retrieved successfully',
@@ -85,10 +85,10 @@ module.exports = {
   }),
 
   update: catchAsync(async (req, res, next) => {
-    const { name, description } = req.body
+    const { imageUrl, text, order } = req.body
     const { id } = req.params
     try {
-      const updatedSlide = await updateSlide({ id, name, description })
+      const updatedSlide = await updateSlide(id, { imageUrl, text, order })
       endpointResponse({
         res,
         code: 200,
