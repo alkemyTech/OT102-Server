@@ -1,4 +1,5 @@
 const { ErrorObject } = require('../helpers/error')
+const db = require('../models/index')
 const { Member } = require('../models')
 
 exports.getMembers = async () => {
@@ -11,19 +12,17 @@ exports.getMembers = async () => {
 
 exports.deleteMember = async (id) => {
   try {
-    const findMember = await Member.findOne({
-      where: { id },
-    })
-    if (!findMember) {
-      throw Error('Member already deleted/Invalid ID')
-    } else {
-      const deletedMember = await Member.destroy({ where: { id } })
-      return deletedMember
+    const member = await Member.findByPk(id)
+    if (!member) {
+      throw new ErrorObject('Member not found', 404)
     }
+    member.destroy()
+    return member
   } catch (error) {
-    throw Error(error.message)
+    throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
+
 exports.addMember = async (data) => {
   try {
     const { id, name, image } = await Member.create(data)
@@ -56,5 +55,28 @@ exports.updateMember = async (data) => {
       throw new ErrorObject('Member not found', 404)
     }
     throw new ErrorObject(error.message, 500)
+  }
+}
+
+exports.getMemberById = async (id) => {
+  try {
+    const member = await Member.findByPk(id)
+    if (!member) {
+      throw new ErrorObject('Member not found', 404)
+    }
+    return member
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}
+
+exports.deleteMemberPermanently = async (id) => {
+  try {
+    return await db.sequelize.query('DELETE FROM members WHERE id = :id', {
+      replacements: { id },
+      type: db.sequelize.QueryTypes.DELETE,
+    })
+  } catch (error) {
+    throw Error(error.message)
   }
 }
