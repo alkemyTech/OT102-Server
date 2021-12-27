@@ -123,12 +123,11 @@ describe('/members', () => {
   })
 
   describe('PUT /', () => {
-    const memberId = '1'
-    const updateURL = `${URL}/${memberId}`
+    const fakeUpdateURL = `${URL}/1`
 
     it('should reject the PUT request without token', async () => {
       /* Act */
-      const response = await request(app).put(updateURL).send(member)
+      const response = await request(app).put(fakeUpdateURL).send(member)
 
       expect(response.status).to.be.equal(401)
       expect(response.body)
@@ -140,7 +139,7 @@ describe('/members', () => {
       token = generateToken({ name: 'test' })
 
       const response = await request(app)
-        .put(updateURL)
+        .put(fakeUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
@@ -155,7 +154,7 @@ describe('/members', () => {
       delete member.name
 
       const response = await request(app)
-        .put(updateURL)
+        .put(fakeUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
@@ -170,7 +169,7 @@ describe('/members', () => {
       delete member.image
 
       const response = await request(app)
-        .put(updateURL)
+        .put(fakeUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
