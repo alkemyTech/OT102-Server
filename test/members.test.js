@@ -123,11 +123,11 @@ describe('/members', () => {
   })
 
   describe('PUT /', () => {
-    const fakeUpdateURL = `${URL}/1`
+    const mockUpdateURL = `${URL}/1`
 
     it('should reject the PUT request without token', async () => {
       /* Act */
-      const response = await request(app).put(fakeUpdateURL).send(member)
+      const response = await request(app).put(mockUpdateURL).send(member)
 
       expect(response.status).to.be.equal(401)
       expect(response.body)
@@ -139,7 +139,7 @@ describe('/members', () => {
       token = generateToken({ name: 'test' })
 
       const response = await request(app)
-        .put(fakeUpdateURL)
+        .put(mockUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
@@ -154,7 +154,7 @@ describe('/members', () => {
       delete member.name
 
       const response = await request(app)
-        .put(fakeUpdateURL)
+        .put(mockUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
@@ -169,7 +169,7 @@ describe('/members', () => {
       delete member.image
 
       const response = await request(app)
-        .put(fakeUpdateURL)
+        .put(mockUpdateURL)
         .set({ 'x-access-token': token })
         .send(member)
 
