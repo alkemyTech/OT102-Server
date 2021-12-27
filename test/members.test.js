@@ -228,7 +228,7 @@ describe('/members', () => {
   })
 
   describe('DELETE /', () => {
-    const deleteURL = `${URL}/1`
+    const mockDeleteURL = `${URL}/1`
     let newMember
 
     beforeEach(async () => {
@@ -243,7 +243,7 @@ describe('/members', () => {
     })
 
     it('should reject the DELETE request without token', async () => {
-      const response = await request(app).delete(deleteURL).send()
+      const response = await request(app).delete(mockDeleteURL).send()
 
       expect(response.status).to.be.equal(401)
       expect(response.body)
@@ -255,7 +255,7 @@ describe('/members', () => {
       token = generateToken({ name: 'test' })
 
       const response = await request(app)
-        .delete(deleteURL)
+        .delete(mockDeleteURL)
         .set({ 'x-access-token': token })
         .send()
 
