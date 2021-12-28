@@ -37,8 +37,8 @@ describe('/contacts', () => {
       expect(response.status).to.eql(200)
     })
     it('Route responds with status true', async () => {
-      const reponse = await request(app).get(URL)
-      expect(reponse.body.status).to.eql(true)
+      const response = await request(app).get(URL)
+      expect(response.body.status).to.eql(true)
     })
     it('Route responds with successful message', async () => {
       const response = await request(app).get(URL)
@@ -49,7 +49,6 @@ describe('/contacts', () => {
     it('Response body receives property keys', async () => {
       const response = await request(app).get(URL)
       const responseArray = response.body.body[0]
-      
       expect(responseArray).to.have.all.keys(attributes)
     })
   })
@@ -96,6 +95,10 @@ describe('/contacts', () => {
         const newContact = await getById(newContactId)
 
         expect(postResponse.status).to.eql(201)
+        expect(postResponse.body.message).to.eql(
+          'Contact was added successfully.'
+        )
+        expect(postResponse.body.status).to.eql(true)
         expect(newContact).to.not.be.null
         expect(newContact).to.have.property('name').equal(contacts.name)
         expect(newContact).to.have.property('phone').equal(contacts.phone)
