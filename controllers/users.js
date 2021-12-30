@@ -134,7 +134,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode || 500,
-        `[Error updating User] - [users - update]: ${error.message}`,
+        `[Error updating User] - [users - UPDATE]: ${error.message}`,
       )
       next(httpError)
     }
