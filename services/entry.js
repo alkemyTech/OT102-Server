@@ -1,5 +1,6 @@
 const createHttpError = require('http-errors')
 const { ErrorObject } = require('../helpers/error')
+const db = require('../models/index')
 const { Entry } = require('../models')
 
 exports.getEntries = async () => {
@@ -12,15 +13,15 @@ exports.getEntries = async () => {
     })
     return entries
   } catch (error) {
-    throw new ErrorObject(error.message, error.statusCode || 500)
+    throw Error(error.message)
   }
 }
 
-exports.getById = async (id) => {
+exports.getEntryById = async (id) => {
   try {
     const entryById = await Entry.findByPk(id)
     if (!entryById) {
-      throw new ErrorObject(`No entry found with ID: ${id}`, 404)
+      throw new ErrorObject('Member not found', 404)
     }
     return entryById
   } catch (error) {
@@ -32,7 +33,7 @@ exports.deleteEntry = async (id) => {
   try {
     const deleteEntry = await Entry.findByPk(id)
     if (!deleteEntry) {
-      throw new ErrorObject(`No entry found with ID: ${id}`, 404)
+      throw new ErrorObject('Member not found', 404)
     }
     deleteEntry.destroy()
     return deleteEntry
@@ -66,6 +67,22 @@ exports.addEntry = async (data) => {
   try {
     return await Entry.create(data)
   } catch (error) {
-    throw new ErrorObject(error.message, error.statusCode || 500)
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new ErrorObject('Entry already exists', 409)
+    } else if (error.name === 'SequelizeConnectionRefusedError') {
+      throw new ErrorObject('Error connecting to database', 500)
+    }
+    throw new ErrorObject(error.message)
+  }
+}
+
+exports.deleteEntryPermanently = async (id) => {
+  try {
+    return await db.sequelize.query('DELETE FROM entries WHERE id = :id', {
+      replacements: { id },
+      type: db.sequelize.QueryTypes.DELETE,
+    })
+  } catch (error) {
+    throw Error(error.message)
   }
 }
