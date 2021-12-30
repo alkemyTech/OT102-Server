@@ -215,7 +215,7 @@ describe('/testimonials', () => {
     })
     it('Updates testimonial', async () => {
       const id = newTestimonial.id
-      let updatedTestimonial
+
       const updateResponse = await request(app)
         .put(`${URL}/${id}`)
         .set({ 'x-access-token': token })
@@ -225,10 +225,7 @@ describe('/testimonials', () => {
           content: 'Updated Test Content',
         })
 
-      if (updateResponse) {
-        updatedTestimonial = await getById(id)
-        return updatedTestimonial
-      }
+      const updatedTestimonial = updateResponse.body.body
 
       expect(updateResponse.status).to.eql(200)
       expect(updatedTestimonial)
