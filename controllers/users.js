@@ -123,6 +123,23 @@ module.exports = {
     }
   }),
 
+  getUserById: catchAsync(async (req, res, next) => {
+    try {
+      const userData = await getUserById(req.params.id)
+      endpointResponse({
+        res,
+        message: 'User retrieved successfully.',
+        body: userData,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error retrieving user] - [/users/me - GET] ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   updateUser: catchAsync(async (req, res, next) => {
     try {
       const updatedUser = await updateUser(req.userId, req.body)
