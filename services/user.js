@@ -45,6 +45,7 @@ exports.getUserById = async (id) => {
       'firstName',
       'lastName',
       'email',
+      'roleId',
       // 'password',
       'image',
       [sequelize.col('role.name'), 'userRole'], // select 'role'.'name' from the JOIN
