@@ -11,7 +11,7 @@ const {
   updateUser,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
-const { getRoleByName } = require('../services/roles')
+const { getRoles, getRoleByName } = require('../services/roles')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -26,6 +26,22 @@ module.exports = {
       const httpError = createHttpError(
         error.statusCode || 500,
         `[Error retrieving users] - [users - get]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+  getRoles: catchAsync(async (req, res, next) => {
+    try {
+      const roles = await getRoles()
+      endpointResponse({
+        res,
+        message: 'Users were retrieved successfully.',
+        body: roles,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error retrieving users] - [roles - get]: ${error.message}`,
       )
       next(httpError)
     }
