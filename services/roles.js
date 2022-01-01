@@ -10,3 +10,11 @@ exports.getRoleByName = async (roleName) => {
     throw new ErrorObject(error.message, error.statusCode || 500)
   }
 }
+
+exports.getRoles = async () => {
+  try {
+    return await Role.findAll()
+  } catch (error) {
+    throw new ErrorObject(error.message, error.statusCode || 500)
+  }
+}

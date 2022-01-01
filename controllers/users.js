@@ -11,7 +11,7 @@ const {
   updateUser,
 } = require('../services/user')
 const { generateToken } = require('../middlewares/jwt')
-const { getRoleByName } = require('../services/roles')
+const { getRoles, getRoleByName } = require('../services/roles')
 
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -26,6 +26,22 @@ module.exports = {
       const httpError = createHttpError(
         error.statusCode || 500,
         `[Error retrieving users] - [users - get]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+  getRoles: catchAsync(async (req, res, next) => {
+    try {
+      const roles = await getRoles()
+      endpointResponse({
+        res,
+        message: 'Users were retrieved successfully.',
+        body: roles,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error retrieving users] - [roles - get]: ${error.message}`,
       )
       next(httpError)
     }
@@ -123,9 +139,27 @@ module.exports = {
     }
   }),
 
+  getUserById: catchAsync(async (req, res, next) => {
+    try {
+      const userData = await getUserById(req.params.id)
+      endpointResponse({
+        res,
+        message: 'User retrieved successfully.',
+        body: userData,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode || 500,
+        `[Error retrieving user] - [/users/me - GET] ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
   updateUser: catchAsync(async (req, res, next) => {
     try {
-      const updatedUser = await updateUser(req.userId, req.body)
+      const { id } = req.params
+      const updatedUser = await updateUser(id, req.body)
       endpointResponse({
         res,
         message: 'User were updated successfully.',
