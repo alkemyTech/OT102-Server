@@ -1,6 +1,6 @@
 const createHttpError = require('http-errors')
 const {
-  getById,
+  getEntryById,
   getEntries,
   deleteEntry,
   updateById,
@@ -15,30 +15,28 @@ module.exports = {
       const allEntries = await getEntries(req.params.type)
       endpointResponse({
         res,
+        code: 200,
         message: 'Entries were retrieved successfully.',
         body: allEntries,
       })
     } catch (error) {
-      const httpError = createHttpError(
-        error.status,
-        `[Error retrieving entries] - [entries - GET]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.statusCode, error.message)
       next(httpError)
     }
   }),
 
   getEntry: catchAsync(async (req, res, next) => {
     try {
-      const entry = await getById(req.params.id)
+      const entry = await getEntryById(req.params.id)
       endpointResponse({
         res,
-        message: 'Entry retrieved succesfully!',
+        message: 'Entry retrieved successfully!',
         body: entry,
       })
     } catch (error) {
       const httpError = createHttpError(
-        error.status,
-        `[Error retrieving entry] - [organization - GET]: ${error.message}`,
+        error.statusCode,
+        `[Error retrieving entry] - [entry - GET]: ${error.message}`,
       )
       next(httpError)
     }
@@ -54,10 +52,7 @@ module.exports = {
         body: deletedEntry,
       })
     } catch (error) {
-      const httpError = createHttpError(
-        error.status,
-        `[Error deleting entry] - [entry - delete]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.statusCode, error.message)
       next(httpError)
     }
   }),
@@ -85,10 +80,7 @@ module.exports = {
         body: updatedEntry,
       })
     } catch (error) {
-      const httpError = createHttpError(
-        error.status,
-        `[Error updating entry] - [entry-PUT]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.statusCode, error.message)
       next(httpError)
     }
   }),
@@ -116,10 +108,7 @@ module.exports = {
         body: entry,
       })
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        `[Error creating activity] - [activities - POST]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.statusCode, error.message)
       next(httpError)
     }
   }),
