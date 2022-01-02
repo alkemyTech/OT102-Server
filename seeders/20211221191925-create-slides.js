@@ -5,7 +5,7 @@ module.exports = {
 
      await queryInterface.bulkInsert('Slides', [
     {
-     imageUrl: 'https://i.ibb.co/b5pRxTd/alkemy1.jpg',
+     imageUrl: 'https://i.ibb.co/y4nDFTz/slide-1.jpg',
      text: 'Somos Mas',
      order: 1,
      organizationId: 1,
@@ -13,7 +13,7 @@ module.exports = {
      updatedAt: new Date()
     },
     {
-      imageUrl: 'https://i.ibb.co/5hkvWK3/alkemy2.jpg',
+      imageUrl: 'https://i.ibb.co/mqrZXPw/slide-2.jpg',
       text: 'Somos Mas',
       order: 2,
       organizationId: 1,
@@ -21,7 +21,7 @@ module.exports = {
       updatedAt: new Date()
      },
      {
-      imageUrl: 'https://i.ibb.co/wLZWvgq/alkemy3.jpg',
+      imageUrl: 'https://i.ibb.co/RBJnJ1V/slide-3.jpg',
       text: 'Somos Mas',
       order: 3,
       organizationId: 1,

@@ -5,7 +5,10 @@ const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
 
 const {
-  addMember, deleteMember, getMembers, updateMember,
+  addMember,
+  deleteMember,
+  getMembers,
+  updateMember,
 } = require('../services/members')
 
 module.exports = {
@@ -18,7 +21,12 @@ module.exports = {
         body: allMembers,
       })
     } catch (error) {
-      next(new ErrorObject(`[Error retrieving members] - [members - get]: ${error.message}`, 500))
+      next(
+        new ErrorObject(
+          `[Error retrieving members] - [members - get]: ${error.message}`,
+          500,
+        ),
+      )
     }
   }),
 
@@ -32,7 +40,7 @@ module.exports = {
       })
     } catch (error) {
       const httpError = createHttpError(
-        500,
+        error.statusCode,
         `[Error deleting members] - [members - delete]: ${error.message}`,
       )
       next(httpError)

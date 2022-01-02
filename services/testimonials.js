@@ -1,4 +1,5 @@
 const { ErrorObject } = require('../helpers/error')
+const db = require('../models/index')
 const { Testimonial } = require('../models')
 
 exports.getAllTestimonials = async () => {
@@ -30,7 +31,10 @@ exports.updateById = async (id, name, image, content) => {
     }
 
     testimonial.set({
-      id, name, image, content,
+      id,
+      name,
+      image,
+      content,
     })
     testimonial.save()
 
@@ -47,10 +51,13 @@ exports.deleteTestimonial = async (id) => {
   try {
     const testimonial = await Testimonial.findByPk(id)
     if (!testimonial) {
-      throw Error('Testimonial already deleted')
+      throw Error('Not found')
     }
     return await Testimonial.destroy({ where: { id } })
   } catch (error) {
+    if (error.message === 'Not found') {
+      throw new ErrorObject('No Testimonial found with that ID', 404)
+    }
     throw new ErrorObject(error.message)
   }
 }
@@ -73,5 +80,16 @@ exports.addTestimonial = async (data) => {
       throw new ErrorObject('Error connecting to database', 500)
     }
     throw new ErrorObject(error.message)
+  }
+}
+
+exports.deleteTestimonialPermanently = async (id) => {
+  try {
+    return await db.sequelize.query('DELETE FROM testimonials WHERE id = :id', {
+      replacements: { id },
+      type: db.sequelize.QueryTypes.DELETE,
+    })
+  } catch (error) {
+    throw Error(error.message)
   }
 }
