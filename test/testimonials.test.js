@@ -181,6 +181,18 @@ describe('/testimonials', () => {
 
   // Tests Put route. Private route. Updates existing testimonials.
   describe('PUT /testimonials/:id', () => {
+    let newTestimonial
+
+    beforeEach(async () => {
+      // Create a testimonial to update before each test.
+      newTestimonial = await addTestimonial(testimonial)
+    })
+
+    afterEach(async () => {
+      // Clean up DB after each test.
+      await deleteTestimonialPermanently(newTestimonial.id)
+    })
+
     it('Only allows Admin user to access this route', async () => {
       token = generateToken({ name: 'test' })
 
@@ -202,7 +214,6 @@ describe('/testimonials', () => {
       expect(postResponse.status).to.eql(404)
     })
     it('Updates testimonial', async () => {
-      const newTestimonial = await addTestimonial(testimonial)
       const id = newTestimonial.id
 
       const updateResponse = await request(app)
@@ -214,25 +225,35 @@ describe('/testimonials', () => {
           content: 'Updated Test Content',
         })
 
-      const updatedTestimonial = await getById(id)
+      const updatedTestimonial = updateResponse.body.body
+
       expect(updateResponse.status).to.eql(200)
       expect(updatedTestimonial)
         .to.have.property('name')
-        .equal('Updated Test Name')
+        .eql('Updated Test Name')
       expect(updatedTestimonial)
         .to.have.property('image')
-        .equal('updated.image.url')
+        .eql('updated.image.url')
       expect(updatedTestimonial)
         .to.have.property('content')
-        .equal('Updated Test Content')
-
-      // Clean-up DB:
-      await deleteTestimonialPermanently(id)
+        .eql('Updated Test Content')
     })
   })
 
   // Tests Delete Route. Private Route. Deletes Testimonial.
   describe('DELETE /testimonials/:id', () => {
+    let newTestimonial
+
+    beforeEach(async () => {
+      // Create a testimonial to delete before each test.
+      newTestimonial = await addTestimonial(testimonial)
+    })
+
+    afterEach(async () => {
+      // Clean up DB after each test.
+      await deleteTestimonialPermanently(newTestimonial.id)
+    })
+
     it('Only allows Admin user to access this route', async () => {
       token = generateToken({ name: 'test' })
 
@@ -246,16 +267,15 @@ describe('/testimonials', () => {
         .to.have.property('message')
         .match(/forbidden/i)
     })
-    it('Returns Status code 500 with non existing ID', async () => {
+    it('Returns Status code 404 with non existing ID', async () => {
       const deleteResponse = await request(app)
         .delete(`${URL}/0`)
         .set({ 'x-access-token': token })
         .send()
 
-      expect(deleteResponse.status).to.eql(500)
+      expect(deleteResponse.status).to.eql(404)
     })
     it('Deletes testimonial', async () => {
-      const newTestimonial = await addTestimonial(testimonial)
       const id = newTestimonial.id
 
       const deleteResponse = await request(app)
@@ -264,8 +284,6 @@ describe('/testimonials', () => {
         .send()
 
       expect(deleteResponse.status).to.eql(200)
-      // Clean-up DB:
-      await deleteTestimonialPermanently(id)
     })
   })
 })
