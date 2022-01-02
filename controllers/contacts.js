@@ -10,13 +10,14 @@ module.exports = {
       const contacts = await getContacts()
       endpointResponse({
         res,
+        code: 200,
         message: 'Contacts were retrieved successfully.',
         body: contacts,
       })
     } catch (error) {
       const httpError = createHttpError(
         error.status,
-        `[Error retrieving contacts][contacts-GET]: ${error.message}`,
+        `[Error retrieving contacts][contacts - GET]: ${error.message}`,
       )
       next(httpError)
     }
@@ -34,6 +35,7 @@ module.exports = {
       })
       endpointResponse({
         res,
+        code: 201,
         message: 'Contact was added successfully.',
         body: contact,
       })
@@ -45,10 +47,7 @@ module.exports = {
         )
       }
     } catch (error) {
-      const httpError = createHttpError(
-        error.status,
-        `[Error adding contact] - [contacts - put]: ${error.message}`,
-      )
+      const httpError = createHttpError(error.status, error.message)
       next(httpError)
     }
   }),
