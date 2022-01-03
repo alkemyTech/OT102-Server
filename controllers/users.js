@@ -93,13 +93,13 @@ module.exports = {
             status: 200,
           })
         } else {
-          throw new Error(400, 'Invalid credentials')
+          throw new Error(401, 'Credenciales inválidas')
         }
       }
     } catch (error) {
       const httpError = createHttpError(
-        error.statusCode || 500,
-        `[Error logging users] - [users - post]: ${error.message}`,
+        error.statusCode || 401,
+        'Credenciales inválidas',
       )
       next(httpError)
     }
