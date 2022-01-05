@@ -124,6 +124,16 @@ describe('/members', () => {
 
   describe('PUT /', () => {
     const mockUpdateURL = `${URL}/1`
+    let newMember
+
+    beforeEach(async ()=>{
+      newMember = await addMember(member)
+    })
+
+    afterEach(async ()=>{
+      //clean up
+      await deleteMemberPermanently(newMember.id)
+    })
 
     it('should reject the PUT request without token', async () => {
       /* Act */
@@ -194,24 +204,18 @@ describe('/members', () => {
         .match(/not found/i)
     })
 
-    it('should update a member in the database', async () => {
-      const newMember = await addMember(member)
-
-      const response = await request(app)
+    it('should update a member in the database', () => {
+      request(app)
         .put(`${URL}/${newMember.id}`)
         .set({ 'x-access-token': token })
         .send({ ...member, name: 'Doe, johnn' })
-
-      const updatedMember = await getMemberById(newMember.id)
-      expect(updatedMember).to.have.property('name').equal('Doe, johnn')
-
-      //clean up
-      await deleteMemberPermanently(newMember.id)
+        .then(async (response) => {
+          const updatedMember = await getMemberById(newMember.id)
+          expect(updatedMember).to.have.property('name').equal('Doe, johnn')
+        })
     })
 
     it('should return the updated member', async () => {
-      const newMember = await addMember(member)
-
       const response = await request(app)
         .put(`${URL}/${newMember.id}`)
         .set({ 'x-access-token': token })
@@ -221,9 +225,6 @@ describe('/members', () => {
       expect(response.status).to.be.equal(200)
       expect(updatedMember).to.have.property('name').equal('Doe, johnn')
       expect(updatedMember).to.have.property('image').equal('some.image.url')
-
-      //clean up
-      await deleteMemberPermanently(newMember.id)
     })
   })
 

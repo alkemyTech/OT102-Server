@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const userExtractor = (req, res, next) => {
-  const token = req.get('x-access-token')
+  const token = req.headers['x-access-token']
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
   if (!token || !decodedToken.user) {
